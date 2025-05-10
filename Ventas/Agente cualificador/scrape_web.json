@@ -1,0 +1,228 @@
+{
+  "name": "scrape web",
+  "nodes": [
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer TU_APYKEY"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"url\": \"{{ $json.query }}\",\n  \"formats\": [\n    \"markdown\",\n    \"html\"\n  ]\n} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        340
+      ],
+      "id": "39379f1d-e2d3-4b43-85c5-afb88763ddcc",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.data.markdown }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=INSTRUCCIONES PARA EL AGENTE DE ANÁLISIS WEB Y GENERACIÓN DE BRIEF\n\nRol: Eres un agente especializado en análisis web y consultor de automatización de procesos.  \nTu tarea es analizar sitios web de leads cualificados para generar briefs estratégicos.  \n\nPROCESO DE ANÁLISIS:  \n1. Examinar estructura del sitio web  \n2. Identificar servicios y soluciones ofrecidas  \n3. Analizar procesos de negocio visibles  \n4. Detectar herramientas y tecnologías mencionadas  \n5. Evaluar puntos de automatización potenciales  \n\nFORMATO DEL BRIEF:  \n\nPERFIL DE EMPRESA  \n- Sector/Industria: [identificar sector principal]  \n- Servicios Principales: [listar servicios clave]  \n- Alcance de Mercado: [B2B/B2C, mercados objetivo]  \n- Nivel de Madurez Digital: [básico/intermedio/avanzado]  \n\nANÁLISIS DE PROCESOS  \n- Procesos Identificados: [listar procesos visibles]  \n- Herramientas Actuales: [tecnologías mencionadas]  \n- Puntos de Dolor: [identificar ineficiencias]  \n- Oportunidades de Automatización: [listar áreas potenciales]  \n\nRECOMENDACIONES DE AUTOMATIZACIÓN  \n- Prioridad Alta: [procesos críticos]  \n- Prioridad Media: [procesos recurrentes]  \n- Prioridad Baja: [procesos opcionales]  \n\nPROPUESTA DE VALOR  \n- Beneficios Clave: [impacto esperado]  \n- ROI Estimado: [ahorro de tiempo/recursos]  \n- Timeline Sugerido: [fases de implementación]  \n\nRIESGOS Y CONSIDERACIONES  \n- Dependencias Técnicas: [requisitos tecnológicos]  \n- Factores Críticos: [elementos a considerar]  \n- Plan de Mitigación: [estrategias sugeridas]  \n\nSIGUIENTE PASO RECOMENDADO  \n- Acción Principal: [siguiente paso estratégico]  \n- Documentos Necesarios: [información adicional requerida]  \n- Contactos Clave: [roles a involucrar]  \n\nSALIDA:  \n```json\n{\n  \"clienteID\": \"string\",\n  \"urlAnalizada\": \"string\",\n  \"nivelPrioridad\": \"alto/medio/bajo\",\n  \"potencialAutomatizacion\": {\n    \"puntuacion\": \"1-100\",\n    \"justificacion\": \"string\"\n  },\n  \"procesosIdentificados\": [\"array\"],\n  \"recomendacionesInmediatas\": [\"array\"],\n  \"presupuestoEstimado\": {\n    \"minimo\": \"USD\",\n    \"optimo\": \"USD\"\n  },\n  \"timelineEstimado\": \"string\"\n}\n\nCONSIDERACIONES ADICIONALES:\n\n- Enfócate en procesos B2B y flujos de trabajo empresariales\n- Identifica integraciones existentes y potenciales\n- Evalúa la escalabilidad de las soluciones propuestas\n- Considera el ROI en términos de tiempo y recursos ahorrados"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        700,
+        340
+      ],
+      "id": "411c5dd3-c87d-4803-9055-5e62b9f26779",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "jsCode": "function formatDataToString(items) {\n    try {\n        const data = items[0].output;\n\n        let result = \"\";\n\n        result += \"ANÁLISIS DE AUTOMATIZACIÓN\\n\";\n        result += \"--------------------------\\n\\n\";\n\n        result += `Cliente ID: ${data.clienteID}\\n`;\n        result += `URL Analizada: ${data.urlAnalizada}\\n`;\n        result += `Nivel de Prioridad: ${data.nivelPrioridad}\\n\\n`;\n\n        result += \"POTENCIAL DE AUTOMATIZACIÓN\\n\";\n        result += \"--------------------------\\n\";\n        result += `Puntuación: ${data.potencialAutomatizacion.puntuacion}/100\\n`;\n        result += `Justificación: ${data.potencialAutomatizacion.justificacion}\\n\\n`;\n\n        result += \"PROCESOS IDENTIFICADOS\\n\";\n        result += \"----------------------\\n\";\n        data.procesosIdentificados.forEach(proceso => {\n            result += `- ${proceso}\\n`;\n        });\n        result += \"\\n\";\n\n        result += \"RECOMENDACIONES INMEDIATAS\\n\";\n        result += \"--------------------------\\n\";\n        data.recomendacionesInmediatas.forEach(recomendacion => {\n            result += `- ${recomendacion}\\n`;\n        });\n        result += \"\\n\";\n\n        result += \"PRESUPUESTO ESTIMADO\\n\";\n        result += \"--------------------\\n\";\n        result += `Mínimo: $${data.presupuestoEstimado.minimo} USD\\n`;\n        result += `Óptimo: $${data.presupuestoEstimado.optimo} USD\\n\\n`;\n\n        result += \"TIMELINE\\n\";\n        result += \"--------\\n\";\n        result += data.timelineEstimado;\n\n        return { stringFormateado: result };\n    } catch (error) {\n        // En caso de error, retorna el error y los datos recibidos para debug\n        return {\n            error: error.message,\n            inputRecibido: JSON.stringify(items, null, 2)\n        };\n    }\n}\n\n// Para n8n\nreturn formatDataToString($input.all());\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        340
+      ],
+      "id": "3bd4e1ef-4156-4106-966a-2d80efec211e",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "883d9435-e318-4c26-abae-f3028667a387",
+              "name": "inputRecibido",
+              "value": "={{ $json.inputRecibido }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1280,
+        340
+      ],
+      "id": "e88f5f22-fa91-466c-9e36-2d5bf7e7c25b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-chat",
+          "mode": "list",
+          "cachedResultName": "deepseek-chat"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        680
+      ],
+      "id": "fb5d527c-b690-4389-9847-81227c0439bf",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "clqhhAImD2xlFPF2",
+          "name": "Deepseek"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"clienteID\": \"string\",\n  \"urlAnalizada\": \"string\",\n  \"nivelPrioridad\": \"alto/medio/bajo\",\n  \"potencialAutomatizacion\": {\n    \"puntuacion\": \"1-100\",\n    \"justificacion\": \"string\"\n  },\n  \"procesosIdentificados\": [\"array\"],\n  \"recomendacionesInmediatas\": [\"array\"],\n  \"presupuestoEstimado\": {\n    \"minimo\": \"USD\",\n    \"optimo\": \"USD\"\n  },\n  \"timelineEstimado\": \"string\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        740,
+        660
+      ],
+      "id": "85948b01-cb02-453a-84a5-01fc8a14c9ec",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        340
+      ],
+      "id": "afe06dae-c26a-4368-88b3-e18e3a5043e1",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "70651330-dbc1-42cc-985c-f48bd9a826f7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "DxmZjmXJaTYfuo4A",
+  "tags": [
+    {
+      "createdAt": "2025-02-14T21:13:45.609Z",
+      "updatedAt": "2025-02-14T21:13:45.609Z",
+      "id": "tP4cGyIPJNqUMris",
+      "name": "Smythio"
+    }
+  ]
+}

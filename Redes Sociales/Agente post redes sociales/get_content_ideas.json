@@ -1,0 +1,148 @@
+{
+  "name": "get content ideas",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -320,
+        -60
+      ],
+      "id": "d04a3a83-8430-4534-9714-93455de39e2f",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are a professional content writer. Create 10 topic suggestions that align with the provided brand brief.\n\nJSON output format:\n\n{\n  \"suggestions\": [\n    \"Create a post about [...]\",\n    ...\n  ]\n}\n\nBrand brief: \n{{ $json.content }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        120,
+        -60
+      ],
+      "id": "6cef35cf-e2f7-4351-ba69-349430d73d1c",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "e1a80db8-cfbc-4141-91d0-2f639bf919fa",
+              "name": "suggestions",
+              "value": "={{ $json.message.content.suggestions }}",
+              "type": "array"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        480,
+        -60
+      ],
+      "id": "1b74d4c7-7c37-443e-a13d-ac58561c3be2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "dtVbgyzBTF6VwNnA",
+          "mode": "list",
+          "cachedResultName": "Get Band brief"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        -100,
+        -60
+      ],
+      "id": "70ac2026-131f-46e4-8074-9d7290e09870",
+      "name": "Get brand brief"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get brand brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get brand brief": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dfcc0ea0-fdb0-4fba-af2e-c1cdd37d0aba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "Ur8LRHZhwQ9FrkiT",
+  "tags": []
+}

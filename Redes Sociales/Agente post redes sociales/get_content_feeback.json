@@ -1,0 +1,166 @@
+{
+  "name": "get content feeback",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -260,
+        0
+      ],
+      "id": "dc0fa915-fef8-4fbf-82d6-351d09618a88",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=# RULES\nYou are tasked with evaluating a piece of content written for Simon Hoiberg. Your role is to assess how well the post aligns with Simon’s personal brand, using the below brief as your guide.\n\nPlease analyze the post based on the following criteria:\n\nDoes the post have unwanted artifacts like “Let’s try again” or “Here’s a new post”?\nDoes the content reflect Simon’s core values, voice, and style as described in the brief?\nDoes it engage Simon’s target audience as described in the brief?\nDoes it emphasize Simon’s expertise and domain authority as described in the brief?\nIs the tone, messaging, and approach consistent with the brief’s objectives and positioning?\nAfter evaluation, output a score between 0 and 1, representing the alignment between the post and the brand brief. The score should be output in the following JSON format:\n\n{\n  \"description\": \"[short description here]\",\n  \"score\": \"[insert score here]\"\n}\n\n# BRAND BRIEF\n{{ $json.content }}",
+              "role": "system"
+            },
+            {
+              "content": "={{ $('When Executed by Another Workflow').item.json.query }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        280,
+        0
+      ],
+      "id": "fcd884b2-cb8e-4f6b-933a-40e67424c0d7",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "227350b9-ab1a-4702-85c6-9f4eda143a04",
+              "name": "feedback",
+              "value": "={{ $json.message.content.description }}",
+              "type": "string"
+            },
+            {
+              "id": "e5512af3-60fc-4894-89f5-e009655edb62",
+              "name": "score",
+              "value": "={{ $json.message.content.score }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        0
+      ],
+      "id": "dcefcdec-103c-48b8-b9d0-5fa620a777e2",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "dtVbgyzBTF6VwNnA",
+          "mode": "list",
+          "cachedResultName": "Get Band brief"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.2,
+      "position": [
+        40,
+        0
+      ],
+      "id": "6e8d418f-50fd-4bd8-b7d1-02b273664f15",
+      "name": "Get brand brief"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "This is a mock post about Saas"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get brand brief",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get brand brief": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "c41db4ac-5a96-4f7e-8270-76c00455e4d6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "gFKIIWZptKQOSpZU",
+  "tags": []
+}

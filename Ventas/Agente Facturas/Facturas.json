@@ -1,0 +1,784 @@
+{
+  "name": "Facturas",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -380,
+        -100
+      ],
+      "id": "e110e9ba-cd27-48ab-8570-5bca6bf3247c",
+      "name": "Telegram Trigger",
+      "webhookId": "e4a1b433-7849-4005-b6cc-2d851f98cd31",
+      "credentials": {
+        "telegramApi": {
+          "id": "obY5nDHNgJrSGtRT",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.photo[2].file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "id": "32b151ae-466d-42ee-8e23-0e299ed8f61e"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Imagen"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "0f3ff814-d929-422d-94c2-1645027ef5ab",
+                    "leftValue": "={{ $json.message.document.file_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Document"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -100,
+        -100
+      ],
+      "id": "66947abe-9727-4228-915a-fcd4a2d8d72e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.photo[2].file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        -240
+      ],
+      "id": "d6468cc2-3a76-42c5-a6e4-cf3f1233569f",
+      "name": "Telegram",
+      "webhookId": "91a01155-cc08-409f-b665-4b101e3e4e1d",
+      "credentials": {
+        "telegramApi": {
+          "id": "obY5nDHNgJrSGtRT",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "=## Análisis de la Factura\n\nPor favor, extrae los siguientes datos de la factura y devuélvelos en formato JSON:\n\n1. **Tipo de comprobante**: ¿Qué tipo de comprobante es? (Ej. Factura Electrónica, Boleta, etc.)\n2. **Número de factura**: ¿Cuál es el número de la factura? (Ej. E001-1)\n3. **Cliente/Razón social**: ¿Quién es el cliente o la razón social? (Ej. UNI)\n4. **Cliente/Ruc**: ¿Cuál es el número de RUC del cliente? (Ej. 20169004359)\n5. **Tipo de moneda**: ¿Qué tipo de moneda se utiliza en la factura? (Ej. Nuevos Soles)\n6. **Forma de pago**: ¿Cuál es la forma de pago? (Ej. No especificada)\n7. **Cantidad**: ¿Cuál es la cantidad de los productos o servicios facturados?\n8. **Unidad**: ¿Qué unidad se utiliza para los productos o servicios? (Ej. Unidad)\n9. **Descripción**: ¿Cuál es la descripción del producto o servicio facturado?\n10. **Valor Unitario**: ¿Cuál es el valor unitario de cada producto o servicio? o precio unidad?\n\nPor favor, devuelve los resultados en el siguiente formato JSON:\n\n```json\n{\n  \"factura\": {\n    \"tipo_comprobante\": \"Factura Electrónica\",\n    \"numero_factura\": \"E001-1\",\n    \"cliente_razon_social\": \"UNI\",\n    \"cliente_ruc\": \"20169004359\",\n    \"tipo_moneda\": \"Nuevos soles\",\n    \"forma_pago\": \"No especificada\",\n    \"productos\": [\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"CONTROLCARD 3\",\n        \"valor_unitario\": 889.8305085\n      },\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"KIT USB DOCKING STATION 3 200.00\",\n        \"valor_unitario\": 508.4745627\n      }\n    ]\n  }\n}\n\nAsegúrate de extraer los datos correctamente. Si alguna columna no está especificada en la factura, por favor marca como \"No especificada\" o similar.\n",
+        "inputType": "base64",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        920,
+        -240
+      ],
+      "id": "00690fa8-0fd0-416d-96e9-7e6ca6942a1c",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "toBinary",
+        "sourceProperty": "=data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        -240
+      ],
+      "id": "20fba650-2e7e-4a96-adb6-4a40ea12eabc",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "binaryToPropery",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        460,
+        -240
+      ],
+      "id": "654e8de0-79e3-4db7-91c9-2bf6eb92c882",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.content }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"factura\": {\n    \"tipo_comprobante\": \"Factura Electrónica\",\n    \"numero_factura\": \"E001-4\",\n    \"cliente_razon_social\": \"UNIVERSIDAD NACIONAL DE INGENIERIA UNI\",\n    \"cliente_ruc\": \"20169004359\",\n    \"tipo_moneda\": \"Nuevos Soles\",\n    \"forma_pago\": \"No especificada\",\n    \"productos\": [\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"CONTROL CARD 3\",\n        \"valor_unitario\": 889.8305085\n      },\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"KIT USB DOCKING STATION 3 200.00\",\n        \"valor_unitario\": 508.4745627\n      }\n    ]\n  }\n}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        1140,
+        -240
+      ],
+      "id": "cc917739-aab4-4324-a081-7787f2748551",
+      "name": "Information Extractor"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1180,
+        -60
+      ],
+      "id": "766e8246-dce0-42f5-b1c7-ef255b0a84bb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.document.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        240,
+        240
+      ],
+      "id": "56c4923a-f74a-4f53-b93d-8c87823ac383",
+      "name": "Telegram1",
+      "webhookId": "3c6e5239-3728-4a62-9d2a-df9869de1d2f",
+      "credentials": {
+        "telegramApi": {
+          "id": "obY5nDHNgJrSGtRT",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "id": "e587f661-b4c3-494b-87f1-814c402c4099",
+      "name": "Extract data from PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "position": [
+        520,
+        240
+      ],
+      "typeVersion": 1
+    },
+    {
+      "parameters": {
+        "text": "={{ $json.text }}",
+        "schemaType": "fromJson",
+        "jsonSchemaExample": "{\n  \"factura\": {\n    \"tipo_comprobante\": \"Factura Electrónica\",\n    \"numero_factura\": \"E001-4\",\n    \"cliente_razon_social\": \"UNIVERSIDAD NACIONAL DE INGENIERIA UNI\",\n    \"cliente_ruc\": \"20169004359\",\n    \"tipo_moneda\": \"Nuevos Soles\",\n    \"forma_pago\": \"No especificada\",\n    \"productos\": [\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"CONTROL CARD 3\",\n        \"valor_unitario\": 889.8305085\n      },\n      {\n        \"cantidad\": 1,\n        \"unidad\": \"unidad\",\n        \"descripcion\": \"KIT USB DOCKING STATION 3 200.00\",\n        \"valor_unitario\": 508.4745627\n      }\n    ]\n  }\n}\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.informationExtractor",
+      "typeVersion": 1,
+      "position": [
+        820,
+        240
+      ],
+      "id": "592c4e03-9651-440e-aea5-7535a22e0b24",
+      "name": "Information Extractor1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        660,
+        500
+      ],
+      "id": "3d5a4281-44f9-445f-8e2f-210a97548ca0",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8",
+          "mode": "list",
+          "cachedResultName": "Extract information",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tipo de comprobante": "={{ $json.output.factura.tipo_comprobante }}",
+            "Número de factura": "={{ $json.output.factura.numero_factura }}",
+            "Cliente/Razón social": "={{ $json.output.factura.cliente_razon_social }}",
+            "Cliente/Ruc": "={{ $json.output.factura.cliente_ruc }}",
+            "Tipo de moneda": "={{ $json.output.factura.tipo_moneda }}",
+            "Forma de pago": "={{ $json.output.factura.forma_pago }}",
+            "Cantidad": "={{ $json.output.factura.productos[0].cantidad }}",
+            "Unidad": "={{ $json.output.factura.productos[0].unidad }}",
+            "Descripción ": "={{ $json.output.factura.productos[0].descripcion }}",
+            "Valor Unitario": "={{ $json.output.factura.productos[0].valor_unitario }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tipo de comprobante",
+              "displayName": "Tipo de comprobante",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Número de factura",
+              "displayName": "Número de factura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente/Razón social",
+              "displayName": "Cliente/Razón social",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente/Ruc",
+              "displayName": "Cliente/Ruc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo de moneda",
+              "displayName": "Tipo de moneda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Forma de pago",
+              "displayName": "Forma de pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cantidad",
+              "displayName": "Cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Unidad",
+              "displayName": "Unidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripción ",
+              "displayName": "Descripción ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor Unitario",
+              "displayName": "Valor Unitario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Importe/Subtotal",
+              "displayName": "Importe/Subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "IGV",
+              "displayName": "IGV",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1300,
+        240
+      ],
+      "id": "16f75175-d2b1-496a-8ace-2f6698380717",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IkUuyzh7kfeZuYRb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8",
+          "mode": "list",
+          "cachedResultName": "Extract information",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1MsVbGsgOF3Lt7sTdnU2IWeKnYlBiQCHNRNylvZDCoN8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tipo de comprobante": "={{ $json.output.factura.tipo_comprobante }}",
+            "Número de factura": "={{ $json.output.factura.numero_factura }}",
+            "Cliente/Razón social": "={{ $json.output.factura.cliente_razon_social }}",
+            "Cliente/Ruc": "={{ $json.output.factura.cliente_ruc }}",
+            "Tipo de moneda": "={{ $json.output.factura.tipo_moneda }}",
+            "Forma de pago": "={{ $json.output.factura.forma_pago }}",
+            "Cantidad": "={{ $json.output.factura.productos[0].cantidad }}",
+            "Unidad": "={{ $json.output.factura.productos[0].unidad }}",
+            "Descripción ": "={{ $json.output.factura.productos[0].descripcion }}",
+            "Valor Unitario": "={{ $json.output.factura.productos[0].valor_unitario }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tipo de comprobante",
+              "displayName": "Tipo de comprobante",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Número de factura",
+              "displayName": "Número de factura",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente/Razón social",
+              "displayName": "Cliente/Razón social",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente/Ruc",
+              "displayName": "Cliente/Ruc",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tipo de moneda",
+              "displayName": "Tipo de moneda",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Forma de pago",
+              "displayName": "Forma de pago",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cantidad",
+              "displayName": "Cantidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Unidad",
+              "displayName": "Unidad",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Descripción ",
+              "displayName": "Descripción ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Valor Unitario",
+              "displayName": "Valor Unitario",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Importe/Subtotal",
+              "displayName": "Importe/Subtotal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "IGV",
+              "displayName": "IGV",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Total",
+              "displayName": "Total",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1560,
+        -240
+      ],
+      "id": "5276fe8e-0741-4612-95e0-78f5742fe3fb",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IkUuyzh7kfeZuYRb",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram1": {
+      "main": [
+        [
+          {
+            "node": "Extract data from PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract data from PDF": {
+      "main": [
+        [
+          {
+            "node": "Information Extractor1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Information Extractor1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "52d904ab-7cc6-49dd-a4c1-d2206c8ff9b6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "PGTiAgTU1cyLtsWH",
+  "tags": []
+}

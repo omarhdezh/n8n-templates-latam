@@ -1,0 +1,258 @@
+{
+  "name": "Calcular Distancia Maps",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://maps.googleapis.com/maps/api/geocode/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "address",
+              "value": "={{ $json.query }}"
+            },
+            {
+              "name": "key",
+              "value": "AQUI VA LA API KEY DE GOOGLE PLATFORM"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        0
+      ],
+      "id": "bebc3fd0-1b21-4fd5-96ca-f4045eca3237",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "url": "https://maps.googleapis.com/maps/api/distancematrix/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "origins",
+              "value": "AQUI VA LA LATITUD Y LA LONGITUD DEL PUNTO DE ORIGEN"
+            },
+            {
+              "name": "destinations",
+              "value": "={{ $json.results[0].geometry.location.lat }}, {{ $json.results[0].geometry.location.lng }}"
+            },
+            {
+              "name": "key",
+              "value": "AQUI VA LA API KEY DE GOOGLE PLATFORM"
+            }
+          ]
+        },
+        "options": {
+          "redirect": {
+            "redirect": {}
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        720,
+        0
+      ],
+      "id": "41e54c56-6b52-488f-8260-75da74480f1d",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtener la distancia en metros desde la respuesta de la API\nconst distanciaEnMetros = items[0].json.rows[0].elements[0].distance.value;\n\n// Convertir metros a kilómetros\nconst distanciaEnKm = distanciaEnMetros / 1000;\n\n// Definir el costo por kilómetro\nconst costoPorKm = 5; // 5 soles por kilómetro\n\n// Calcular el costo total\nconst costoTotal = distanciaEnKm * costoPorKm;\n\n// Agregar el costo al objeto de salida\nitems[0].json.costoTotal = costoTotal;\nitems[0].json.distanciaEnKm = distanciaEnKm; // También podemos agregar la distancia en kilómetros para referencia\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        940,
+        0
+      ],
+      "id": "f700dfdf-db3b-4d5d-9467-b7a4697f5daa",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "864edbd0-2c96-4089-9573-d5d86adf4bce",
+              "name": "Distancia",
+              "value": "={{ $json.rows[0].elements[0].distance.text }}",
+              "type": "string"
+            },
+            {
+              "id": "60e2e3d6-da46-4427-82d7-75b647bc4a41",
+              "name": "Tiempo",
+              "value": "={{ $json.rows[0].elements[0].duration.text }}",
+              "type": "string"
+            },
+            {
+              "id": "0466d457-294a-450a-a606-3d41bb2d7e50",
+              "name": "costoTotal",
+              "value": "={{ $json.costoTotal }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1160,
+        0
+      ],
+      "id": "06d46784-5c6a-4f40-a6f5-01ebfe929771",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "- Tu única función es enviar al nodo http request la dirección del usuario.\n- Todas las direcciones son en Lima, Perú.\n- Envia solo la dirección tal como está."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1660,
+        -660
+      ],
+      "id": "d1e6b942-e826-4017-a540-a4ed18069a88",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1660,
+        -460
+      ],
+      "id": "c15e9173-f1a9-4b70-81de-ec406fe7141c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        0
+      ],
+      "id": "15b4222f-fd19-46a7-8b93-627608c3803b",
+      "name": "When Executed by Another Workflow"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "Av. Guardia Civil 1297"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        []
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d4a8625c-e1f3-4314-90ce-17c574f56ded",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "vYf5fqcFTAd3ntzd",
+  "tags": [
+    {
+      "createdAt": "2025-02-14T21:15:40.955Z",
+      "updatedAt": "2025-02-14T21:15:40.955Z",
+      "id": "eVcMjoXMYG4NKwTY",
+      "name": "Restaurant"
+    }
+  ]
+}

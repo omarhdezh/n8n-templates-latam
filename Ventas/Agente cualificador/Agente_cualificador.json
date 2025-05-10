@@ -1,0 +1,975 @@
+{
+  "name": "Agente cualificador",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cualification_leads",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        0
+      ],
+      "id": "be32723e-e5c5-4cf4-aed8-f7e9a627aab0",
+      "name": "Webhook",
+      "webhookId": "a0ea03e9-3012-4dcb-a2ca-c1a1494527fe"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "185ad2b9-bfa7-47bd-b79e-35f5640ac9a7",
+              "name": "Nombre",
+              "value": "={{ $json.body.payload.responses.name.value }}",
+              "type": "string"
+            },
+            {
+              "id": "809afcaf-8d75-4cf3-b5d8-adc3e8cc20a5",
+              "name": "Correo",
+              "value": "={{ $json.body.payload.responses.email.value }}",
+              "type": "string"
+            },
+            {
+              "id": "c7022a2f-9e14-4e36-832e-852ec59fdec1",
+              "name": "Web",
+              "value": "={{ $json.body.payload.responses.Web.value }}",
+              "type": "string"
+            },
+            {
+              "id": "5ac839f2-4b62-4289-a0ba-3413fef619ad",
+              "name": "Procesos",
+              "value": "={{ $json.body.payload.responses.Description.value }}",
+              "type": "string"
+            },
+            {
+              "id": "5ca69bd1-31de-4642-9914-24c9523343cd",
+              "name": "Aplicaciones",
+              "value": "={{ $json.body.payload.responses.Aplicaciones.value }}",
+              "type": "string"
+            },
+            {
+              "id": "37ee2b26-a44f-45b1-9933-99ddc461a03d",
+              "name": "Presupuesto",
+              "value": "={{ $json.body.payload.responses.Presupuesto.value }}",
+              "type": "string"
+            },
+            {
+              "id": "e9080760-50a7-4c66-9a17-613eea952fcc",
+              "name": "Empleados",
+              "value": "={{ $json.body.payload.responses.Empleados.value }}",
+              "type": "string"
+            },
+            {
+              "id": "43f27c47-0db6-4036-88cf-919e638d3dfb",
+              "name": "Teléfono",
+              "value": "={{ $json.body.payload.responses.Telefono.value }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        160,
+        0
+      ],
+      "id": "fdbefe75-eabc-47dd-be0b-8ccf4505308e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Input del formulario\nNombre: {{ $json.Nombre }}\nEmail: {{ $json.Correo }}\nWeb: {{ $json.Web }}\nDescribe tus procesos, paso a paso: {{ $json.Procesos }}\nAplicaciones que usas:{{ $json.Aplicaciones }}\nPresupuesto:{{ $json.Presupuesto }}\nEmpleados:{{ $json.Empleados }}\nTeléfono: {{ $json['Teléfono'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Rol:\nEres un agente de cualificación de leads para una agencia de automatización con IA. Tu objetivo es analizar la información proporcionada por el lead, clasificarlo y asegurar que la información se guarde correctamente antes de entregar el resultado final.\n\nHERRAMIENTAS DISPONIBLES:\n\nGoogle Sheets 1: Para almacenar leads cualificados\nGoogle Sheets 2: Para almacenar leads no cualificados\nPROCESO DE ANÁLISIS:\n\nAnalizar la información proporcionada en el formulario\nAnalizar sus procesos actuales\nEvaluar las aplicaciones que utiliza\nDeterminar el potencial de automatización\nCRITERIOS DE CUALIFICACIÓN:\n\nPresencia digital establecida\nProcesos documentados\nUso de herramientas automatizadas\nTamaño de empresa ≥ 5 empleados\nPresupuesto estimado > $1,000 USD/mes\nSECUENCIA DE EJECUCIÓN:\n\nANÁLISIS INICIAL\n\nRecopilar toda la información del lead\nVerificar criterios de cualificación\nContar criterios cumplidos\nDECISIÓN DE CLASIFICACIÓN\n\nSi cumple 3 o más criterios:\nEstado: Cualificado\nPreparar datos para Sheets 1\nDefinir prioridad\nSi cumple menos de 3 criterios:\nEstado: No cualificado\nPreparar datos para Sheets 2\nDocumentar razones\nACTUALIZACIÓN DE SHEETS (OBLIGATORIO)\n\nPRIMERO: Actualizar el sheet correspondiente\nVerificar que la actualización fue exitosa\nSolo después de confirmar la actualización, proceder al paso 4\nGENERACIÓN DE OUTPUT\n\nSolo después de confirmar la actualización del sheet\nGenerar el JSON de salida\nIMPORTANTE:\n\nNO GENERAR EL OUTPUT JSON HASTA CONFIRMAR LA ACTUALIZACIÓN DEL SHEET\nVERIFICAR QUE LA FILA SE CREÓ CORRECTAMENTE EN EL SHEET CORRESPONDIENTE\nFORMATO DE SALIDA (solo después de actualizar sheet):\n{\n  \"leadStatus\": \"[Cualificado/No cualificado]\",\n  \"criteriosCumplidos\": [\"criterio1\", \"criterio2\", ...],\n  \"potencialAutomatizacion\": \"[alto/medio/bajo]\",\n  \"siguientesAcciones\": [\"acción1\", \"acción2\", ...],\n  \"sheetDestino\": \"Sheet1/Sheet2\",\n  \"sheetActualizado\": true\n}\n\nVERIFICACIONES ANTES DE OUTPUT:\n\n¿Se completó el análisis?\n¿Se actualizó el sheet correctamente?\n¿Se documentaron todas las razones?\n¿Se verificó la actualización?\nSolo si todas las verificaciones son positivas, proceder con el output estructurado.\n\n\n\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        380,
+        0
+      ],
+      "id": "bc579d1c-d203-49aa-93a9-5fc3f15ce272",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "You need to write the info of the qualified leads",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM",
+          "mode": "list",
+          "cachedResultName": "Db cualificador",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cualificados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre": "={{ $fromAI(\"nombre\") }}",
+            "Correo": "={{ $fromAI(\"Correo\") }}",
+            "Web": "={{ $fromAI(\"Web\") }}",
+            "Procesos": "={{ $fromAI(\"Procesos\") }}",
+            "Apps": "={{ $fromAI(\"Apps\") }}",
+            "Argumento": "={{ $fromAI(\"Argument\") }}",
+            "Elemento clave": "={{ $fromAI(\"Keypoints\") }}",
+            "Estado": "={{ $fromAI(\"Estado\") }}",
+            "Mensaje": "={{ $fromAI(\"Mensaje\") }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Web",
+              "displayName": "Web",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Procesos",
+              "displayName": "Procesos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apps",
+              "displayName": "Apps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Argumento",
+              "displayName": "Argumento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Elemento clave",
+              "displayName": "Elemento clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        420,
+        280
+      ],
+      "id": "bf3ce353-8bce-4e69-9102-e3f95bba1794",
+      "name": "Cualificados",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IkUuyzh7kfeZuYRb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"leadStatus\": \"[Cualificado/No cualificado]\",\n  \"criteriosCumplidos\": [\"criterio1\", \"criterio2\"],\n  \"potencialAutomatizacion\": \"[alto/medio/bajo]\",\n  \"siguientesAcciones\": [\"acción1\", \"acción2\"],\n  \"sheetDestino\": \"Sheet1/Sheet2\",\n  \"sheetActualizado\": true\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        580,
+        340
+      ],
+      "id": "5a450747-0ed5-4947-8f90-530cc36615dc",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "You need to write the info of the no qualified leads",
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM",
+          "mode": "list",
+          "cachedResultName": "Db cualificador",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 57978917,
+          "mode": "list",
+          "cachedResultName": "No cualificados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit#gid=57978917"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre": "={{ $fromAI(\"nombre\") }}",
+            "Correo": "={{ $fromAI(\"Correo\") }}",
+            "Web": "={{ $fromAI(\"Web\") }}",
+            "Procesos": "={{ $fromAI(\"Procesos\") }}",
+            "Apps": "={{ $fromAI(\"Apps\") }}",
+            "Argumento": "={{ $fromAI(\"Argument\") }}",
+            "Elemento clave": "={{ $fromAI(\"Keypoints\") }}",
+            "Estado": "={{ $fromAI(\"Estado\") }}",
+            "Mensaje": "={{ $fromAI(\"Mensaje\") }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Web",
+              "displayName": "Web",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Procesos",
+              "displayName": "Procesos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apps",
+              "displayName": "Apps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Argumento",
+              "displayName": "Argumento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Elemento clave",
+              "displayName": "Elemento clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        240,
+        380
+      ],
+      "id": "e0cc12b9-c205-43aa-9c49-382df69d9bc5",
+      "name": "Cualificados1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IkUuyzh7kfeZuYRb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek-chat",
+          "mode": "list",
+          "cachedResultName": "deepseek-chat"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        180,
+        220
+      ],
+      "id": "2ffedd88-1c5e-4a2a-b4c0-052b0e97f285",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "clqhhAImD2xlFPF2",
+          "name": "Deepseek"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1bf1e16f-84e8-4a57-b6b7-05d2a10442c6",
+              "leftValue": "={{ $json.output.sheetDestino }}",
+              "rightValue": "Sheet1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        840,
+        -80
+      ],
+      "id": "87929520-530b-44ac-857b-654dd2d92ed6",
+      "name": "Filter"
+    },
+    {
+      "parameters": {
+        "folderId": "1X_c_tusbkMGeZcoCY48DEs529RqnFpx3",
+        "title": "={{ $('Edit Fields').item.json.Nombre }}"
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        200
+      ],
+      "id": "25b6c813-31bd-47b9-903f-2a1b4771562d",
+      "name": "Google Docs",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "NUif4Mf0mPgplLZd",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentURL": "={{ $fromAI(\"file_id\", \"The ID of the google docs you create\") }}",
+        "actionsUi": {
+          "actionFields": [
+            {
+              "action": "insert",
+              "text": "={{ $fromAI(\"HTML_body\") }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.googleDocsTool",
+      "typeVersion": 2,
+      "position": [
+        1400,
+        120
+      ],
+      "id": "c65ad3a3-dd7f-4f08-aeaf-2635a0cd3343",
+      "name": "Google Docs1",
+      "credentials": {
+        "googleDocsOAuth2Api": {
+          "id": "NUif4Mf0mPgplLZd",
+          "name": "Google Docs account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=input de formulario\n\nNombre: {{ $('Edit Fields').item.json.Nombre }}  \nEmail: {{ $('Edit Fields').item.json.Correo }}  \nSitio Web:   {{ $('Edit Fields').item.json.Web }}\nDescribe tus procesos, paso a paso: {{ $('Edit Fields').item.json.Procesos }}  \nAplicaciones que usas: {{ $('Edit Fields').item.json.Aplicaciones }}  \nPresupuesto: {{ $('Edit Fields').item.json.Presupuesto }}  \nEmpleados: {{ $('Edit Fields').item.json.Empleados }}  \n\nInput Primer Agente IA (Filtro 1)  \nCriteriosCumplidos: {{ $('AI Agent').item.json.output.criteriosCumplidos }}\nLeadStatus: {{ $('AI Agent').item.json.output.leadStatus }}\nPotencialAutomatizacion: {{ $('AI Agent').item.json.output.potencialAutomatizacion }}\n",
+        "options": {
+          "systemMessage": "=Rol: Eres un agente especializado en análisis web y generación de documentación para una agencia de automatización. Tu tarea es realizar una segunda validación y generar documentación detallada.\n\nSECUENCIA DE EJECUCIÓN:\n\n1. VALIDACIÓN INICIAL\n   - Verificar que el sitio web existe y es accesible\n   - Comprobar formato URL válido\n   - Validar que no es sitio vacío\n\n2. ANÁLISIS WEB (si paso 1 exitoso)\n   Evaluar y puntuar:\n   Enviar el sitio web a la tool \"scrape_del_sitio\"\n   - Madurez Digital (30 puntos)\n   - Potencial Automatización (40 puntos)\n   - Señales Capacidad (30 puntos)\n\n3. GENERACIÓN DE DOCUMENTOS\n   SI CUALIFICADO (Score ≥ 70):\n   a) Crear documento nuevo (Tool \"Google Docs\")\n   b) Contenido HTML\n   c) Actualizar documento (Tool \"Google Docs1\")\n   d) Generar JSON de salida\n\n   SI NO CUALIFICADO:\n   a) Documentar razones\n   b) Generar JSON de salida\n\nFORMATO HTML PARA DOCS:\n\n<font size=\"6\" color=\"#1a73e8\"><b>Análisis de [NOMBRE]</b></font>\n\n<font size=\"4\" color=\"#202124\">\n<b>Empresa:</b> [NOMBRE]  \n<b>Sitio web:</b> <a href=\"[URL]\">[URL]</a>  \n<b>Email:</b> [EMAIL]  \n\n<b>Presupuesto:</b> $[PRESUPUESTO] USD  \n<b>Empleados:</b> [EMPLEADOS]  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Status y Puntuación</b></font>\n\n<font size=\"4\" color=\"#202124\">\n<b>Status de Segunda Validación:</b> [STATUS]  \n<b>Puntuación:</b>  \n- Madurez Digital: [X]/30  \n- Potencial de Automatización: [X]/40  \n- Señales de Capacidad: [X]/30  \n- Total: [X]/100  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Procesos Identificados</b></font>\n<font size=\"4\" color=\"#202124\">\n[LISTA_PROCESOS_CON_BULLETS]  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Herramientas Detectadas</b></font>\n<font size=\"4\" color=\"#202124\">\n[LISTA_HERRAMIENTAS_CON_BULLETS]  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Puntos Destacados</b></font>\n<font size=\"4\" color=\"#202124\">\n[LISTA_PUNTOS_CON_BULLETS]  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Recomendaciones</b></font>\n<font size=\"4\" color=\"#202124\">\n[LISTA_RECOMENDACIONES_CON_BULLETS]  \n</font>\n\n<font size=\"4\" color=\"#1a73e8\"><b>Presupuesto y Timeline</b></font>\n<font size=\"4\" color=\"#202124\">\n<b>Presupuesto Estimado</b>  \n- Mínimo: $[MIN_PRESUPUESTO] USD  \n- Óptimo: $[OPT_PRESUPUESTO] USD  \n\n<b>Timeline Estimado:</b> [TIMELINE]  \n</font>\n\nMANEJO DE ERRORES:\n1. SITIO NO ACCESIBLE:\n   - Crear documento con mensaje de error\n   - Score: 0\n   - Status: \"NO_ACCESIBLE\"\n   - Razón: \"Sitio web no accesible o no encontrado\"\n\n2. INFORMACIÓN INSUFICIENTE:\n   - Crear documento con datos disponibles\n   - Score: máximo 50\n   - Status: \"INFO_INSUFICIENTE\"\n   - Documentar información faltante\n\n3. SITIO EN CONSTRUCCIÓN:\n   - Crear documento con observación\n   - Score: máximo 50\n   - Status: \"EN_CONSTRUCCIÓN\"\n   - Razón: \"Sitio web en desarrollo\"\n\nFORMATO DE SALIDA:\n\n{\n  \"leadID\": \"\",\n  \"nombreLead\": \"\",\n  \"sitioWeb\": \"\",\n  \"statusAnalisis\": \"SITIO_ANALIZADO\",\n  \"puntuacion\": {\n    \"madurezDigital\": 0,\n    \"potencialAutomatizacion\": 0,\n    \"senalesCapacidad\": 0,\n    \"total\": 0\n  },\n  \"documentoCreado\": false,\n  \"documentoID\": \"\",\n  \"briefGenerado\": false,\n  \"error\": null\n}\n\nCONSIDERACIONES FINALES:\n1. SIEMPRE crear documento primero\n2. SIEMPRE esperar confirmación de creación\n3. SOLO ENTONCES actualizar con HTML\n4. Documentar cualquier error en cada paso\n5. NO proceder al siguiente paso si el anterior falló\n6. Al crear listas, usar \"-\" como viñetas\n7. Asegurar que cada sección tenga un salto de línea después\n8. Mantener consistencia en el formato y colores\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1160,
+        -160
+      ],
+      "id": "6341524d-ce51-495f-8b51-55272c903ba0",
+      "name": "Investigador"
+    },
+    {
+      "parameters": {
+        "name": "Scrape",
+        "description": "LLamar a esta tool y pasarle el sitio web para analizar",
+        "workflowId": {
+          "__rl": true,
+          "value": "DxmZjmXJaTYfuo4A",
+          "mode": "list",
+          "cachedResultName": "scrape web"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        1040,
+        120
+      ],
+      "id": "796e1cab-c778-4631-9dfc-73966e2717ec",
+      "name": "scrape_del_sitio"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        860,
+        200
+      ],
+      "id": "c9dea6cd-51ae-4090-a7fe-32b0f741701c",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=input de formulario\n\nNombre: {{ $('Edit Fields').item.json.Nombre }}  \nEmail: {{ $('Edit Fields').item.json.Correo }}  \nSitio Web: {{ $('Edit Fields').item.json.Web }}\nDescribe tus procesos, paso a paso: {{ $('Edit Fields').item.json.Procesos }}  \nAplicaciones que usas: {{ $('Edit Fields').item.json.Aplicaciones }}  \nPresupuesto: {{ $('Edit Fields').item.json.Presupuesto }}  \nEmpleados: {{ $('Edit Fields').item.json.Empleados }}  \n\nInput Primer Agente IA (Filtro 1)  \nCriteriosCumplidos:  {{ $('AI Agent').item.json.output.criteriosCumplidos }}\nLeadStatus:  {{ $('AI Agent').item.json.output.leadStatus }}\nPotencialAutomatizacion:  {{ $('AI Agent').item.json.output.potencialAutomatizacion }} \n\nNumero de Telefono: {{ $('Edit Fields').item.json['Teléfono'] }}\n",
+        "options": {
+          "systemMessage": "=INSTRUCCIONES PARA AGENTE DE SEGUIMIENTO Y COMUNICACIÓN\n\nRol: Eres un agente especializado en seguimiento de leads de alto valor para una agencia de automatización. Tu objetivo es generar comunicaciones personalizadas y mantener actualizado el estado de seguimiento.\n\nHERRAMIENTAS DISPONIBLES:\n1. Tool \"emailFollowup\": Para enviar correos personalizados.\n2. Tool \"smsFollowup\": Para enviar mensajes de WhatsApp.\n3. Tool \"Google Sheets\": Para actualizar el estado del lead.\n\nSECUENCIA DE EJECUCIÓN (ORDEN OBLIGATORIO):\n\n1. PREPARAR Y ENVIAR COMUNICACIONES\n   - Generar y enviar email personalizado.\n   - Generar y enviar mensaje de WhatsApp\n   - Verificar envío exitoso de ambas comunicaciones\n\n2. BUSCAR Y ACTUALIZAR EN SHEETS\n   - Filtrar la fila correspondiente usando el nombre del lead\n   - Verificar que el lead fue encontrado\n   - Solo actualizar si:\n     - Estado actual = \"ALTO VALOR\"\n   - Actualizar estado a \"ALTO VALOR\"\n   - Actualizar columna mensaje a \"MENSAJE ENVIADO\"\n\nFORMATO DE MENSAJES:\n\nEMAIL:\n```json\n\n{\n  email: email_del_lead,\n  title: Seguimiento Proyecto Automatización,\n  html_message: Hola,<br/><br/>Gracias por completar el formulario de interés. Hemos recibido su solicitud para el proyecto y estamos analizando la información proporcionada para generar una cotización personalizada o, en su caso, agendar una cita para profundizar sus necesidades.<br/><br/>Nos pondremos en contacto con usted en la brevedad. Mientras tanto, si tiene alguna pregunta, no dude en comunicarse con nosotros a carla@innovatech.com.<br/><br/>Saludos cordiales,<br/>Carla<br/>Innovatech - Agencia de Automatización\n}\n\n\nWhatpsapp:\n\n{\n  \"phone\": \"número_del_lead\",\n  \"message\": \"Hola, soy Carla de Innovatech. Hemos recibido su solicitud y estamos evaluando su proyecto para generar una cotización personalizada o agendar una reunión. ¿Le interesa conversar y conocer cómo podemos ayudarle a optimizar sus operaciones y crecer su negocio?\",\n  \"messageMethod\": \"whatsapp\"\n}\n\n\nPROCESO DE ACTUALIZACIÓN EN SHEETS:\n\n1. Ubicar nombre del lead\n2. Buscar la fila correspondiente en el sheet\n3. Verificar que se encontró el lead\n4. Solo si se encuentra el lead:\n5. Actualizar estado a \"ALTO VALOR\"\n6. Actualizar mensaje a \"MENSAJE ENVIADO\"\n7. VERIFICACIONES ANTES DE OUTPUT:\n\n¿Se enviaron correctamente ambas comunicaciones?\n¿Se encontró el lead en el sheet?\n¿Se actualizó el estado del lead?\n¿Se registró el envío del mensaje?\n\nIMPORTANTE:\n\nVERIFICAR QUE SE ENCONTRÓ EL LEAD CORRECTO ANTES DE ACTUALIZAR\nMANTENER CONSISTENCIA EN EL TONO DE COMUNICACIÓN\nVERIFICAR NÚMEROS Y CORREOS ANTES DE ENVIAR"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        1780,
+        -460
+      ],
+      "id": "e140efed-e9a3-437a-870d-b372667b6d20",
+      "name": "Seguimiento"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM",
+          "mode": "list",
+          "cachedResultName": "Db cualificador",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Cualificados",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1yIPaMxANcAaao_cu1SW7DTjyMpWCDm6Mx65dLwL93cM/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Nombre": "={{ $fromAI(\"name\") }}",
+            "Estado": "={{ $fromAI(\"Estado\") }}"
+          },
+          "matchingColumns": [
+            "Nombre"
+          ],
+          "schema": [
+            {
+              "id": "Nombre",
+              "displayName": "Nombre",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Correo",
+              "displayName": "Correo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Web",
+              "displayName": "Web",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Procesos",
+              "displayName": "Procesos",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Apps",
+              "displayName": "Apps",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Argumento",
+              "displayName": "Argumento",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Elemento clave",
+              "displayName": "Elemento clave",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Estado",
+              "displayName": "Estado",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mensaje",
+              "displayName": "Mensaje",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.5,
+      "position": [
+        2080,
+        -200
+      ],
+      "id": "3355c0ec-d369-4bef-88b5-ff3256043c61",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "IkUuyzh7kfeZuYRb",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "EmailFollowup",
+        "workflowId": {
+          "__rl": true,
+          "value": "avln7iDbQEeQuwmK",
+          "mode": "list",
+          "cachedResultName": "Gmail seguimiento"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        1880,
+        -140
+      ],
+      "id": "f2b73363-48b3-4da0-9075-ffa95ee5d9a4",
+      "name": "emailFollowup"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        1600,
+        60
+      ],
+      "id": "579dc007-72c9-400f-b8d4-ba6528aa9b9f",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cualificados": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cualificados1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Filter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter": {
+      "main": [
+        [
+          {
+            "node": "Investigador",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs": {
+      "ai_tool": [
+        [
+          {
+            "node": "Investigador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Docs1": {
+      "ai_tool": [
+        [
+          {
+            "node": "Investigador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "scrape_del_sitio": {
+      "ai_tool": [
+        [
+          {
+            "node": "Investigador",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Investigador",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Investigador": {
+      "main": [
+        [
+          {
+            "node": "Seguimiento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Seguimiento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "emailFollowup": {
+      "ai_tool": [
+        [
+          {
+            "node": "Seguimiento",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Seguimiento",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0fc5d99b-86d5-445f-893b-1ed4aa77f64d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "JIymZAx92oDURTgu",
+  "tags": [
+    {
+      "createdAt": "2025-02-14T21:13:45.609Z",
+      "updatedAt": "2025-02-14T21:13:45.609Z",
+      "id": "tP4cGyIPJNqUMris",
+      "name": "Smythio"
+    }
+  ]
+}

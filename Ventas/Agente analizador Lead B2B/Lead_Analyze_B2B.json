@@ -1,0 +1,986 @@
+{
+  "name": "Lead Analyze B2B",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "71e3d886-7236-4bf8-8581-ddd1c9775b45",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "resource": "base",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        220,
+        0
+      ],
+      "id": "a218209c-8fd2-4135-adec-dde2da588312",
+      "name": "Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "VA5rWhnxDSsLS3XP",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "base",
+        "operation": "getSchema",
+        "base": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        440,
+        0
+      ],
+      "id": "d036d843-6bcf-42d1-b21f-ff5bfad3a379",
+      "name": "Airtable1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "VA5rWhnxDSsLS3XP",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c17b3f02-c962-4efe-8321-257bcdb2804f",
+              "name": "id_table",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "008d8ad4-390d-4b44-a4d7-a6ca49b04f52",
+              "name": "Base_id",
+              "value": "={{ $('Airtable').item.json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        660,
+        0
+      ],
+      "id": "2eb69c44-d053-4e3b-a256-d366c12540ae",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.airtable.com/v0/{{ $json.Base_id }}/{{ $json.id_table }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "airtableTokenApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        860,
+        0
+      ],
+      "id": "78298f49-f2a0-475e-b3c0-895ed095f744",
+      "name": "HTTP Request",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "VA5rWhnxDSsLS3XP",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "base": {
+          "__rl": true,
+          "value": "apprWYFrxmj8XfzXW",
+          "mode": "list",
+          "cachedResultName": "Smythio",
+          "cachedResultUrl": "https://airtable.com/apprWYFrxmj8XfzXW"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0Oj6GDgK0nEJAP",
+          "mode": "list",
+          "cachedResultName": "proyectos",
+          "cachedResultUrl": "https://airtable.com/apprWYFrxmj8XfzXW/tbl0Oj6GDgK0nEJAP"
+        },
+        "id": "={{ $json.records[0].id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1080,
+        0
+      ],
+      "id": "1e795487-3ff2-488b-9857-be3538367e87",
+      "name": "Airtable2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "VA5rWhnxDSsLS3XP",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://maps.googleapis.com/maps/api/geocode/json",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "address",
+              "value": "={{ $json.Location }}"
+            },
+            {
+              "name": "key",
+              "value": "AIzaSyDXryXxDqdKSqVnRh-5pYd75hHODtxtWYs"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        0
+      ],
+      "id": "fb16fa33-fccd-4fc8-ac1d-3c89505e32ef",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Lista de países de Latinoamérica\nconst latamPaises = [\n  \"Peru\", \"México\", \"Argentina\", \"Chile\", \"Colombia\", \"Brasil\", \"Venezuela\", \n  \"Ecuador\", \"Bolivia\", \"Paraguay\", \"Uruguay\", \"Guatemala\", \"Cuba\", \"Honduras\", \n  \"El Salvador\", \"Nicaragua\", \"Costa Rica\", \"Panamá\", \"República Dominicana\", \n  \"Puerto Rico\", \"Belice\", \"Jamaica\", \"Trinidad y Tobago\", \"Barbados\", \"Guyana\"\n];\n\n// País obtenido (esto debe venir de tu flujo, por ejemplo, de la dirección extraída)\nconst pais = $input.first().json.results[0].address_components[6].long_name; // Esta es una variable dinámica que recibes en tu flujo\n\n// Verificar si el país está en la lista de países latinoamericanos\nif (latamPaises.includes(pais)) {\n  // Si el país está en Latinoamérica, continuar con el proceso\n  return {\n    continueProcess: true,\n    pais: pais\n  };\n} else {\n  // Si el país no es Latinoamérica, descartarlo\n  return {\n    continueProcess: false,\n    pais: pais || 'No encontrado'\n  };\n}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1560,
+        0
+      ],
+      "id": "e4dcf8c5-03a3-4f4e-9c6d-0c363363cdfa",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Airtable2').item.json[\"LinkedIn Organization URL\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1800,
+        0
+      ],
+      "id": "78452d4b-3019-4479-8cff-a1c902d0c8a4",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlContent = $input.first().json.data; // Replace this with the field containing your HTML content\n\n// Function to strip HTML tags and clean the text\nconst extractPlainText = (html) => {\n    if (!html) return \"\";\n\n    // Remove script and style tags along with their content\n    const withoutScriptsAndStyles = html\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, \"\")\n        .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, \"\");\n\n    // Remove all remaining HTML tags\n    const strippedText = withoutScriptsAndStyles.replace(/<\\/?[^>]+>/gi, \"\");\n\n    // Replace HTML entities with their plain-text equivalents\n    const decodedText = strippedText\n        .replace(/&nbsp;/gi, \" \")\n        .replace(/&amp;/gi, \"&\")\n        .replace(/&lt;/gi, \"<\")\n        .replace(/&gt;/gi, \">\")\n        .replace(/&quot;/gi, '\"')\n        .replace(/&#39;/gi, \"'\");\n\n    // Replace multiple spaces, tabs, and newlines with a single space\n    const cleanedText = decodedText.replace(/\\s+/gi, \" \").trim();\n\n    return cleanedText;\n}\n\n// Call the function to process the HTML content\nconst plainText = extractPlainText(htmlContent);\n\n// Return the plain text as the output of this node\nreturn {\n    PlainText: plainText\n};\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2020,
+        0
+      ],
+      "id": "675783a3-1c44-40ba-8765-cb05a6ee74bc",
+      "name": "Code1"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Eres un experto en análisis de negocios profesional y extracción de datos de LinkedIn. Tu tarea es analizar el perfil de LinkedIn extraído de una empresa para producir un informe detallado de alta calidad. Tu respuesta debe ser precisa, estructurada y enfocada en los conocimientos específicos que se detallan a continuación. Asegúrate de que todos los resultados sean profesionales, basados en hechos y bien organizados.",
+              "role": "system"
+            },
+            {
+              "content": "=**Analiza los datos del perfil de LinkedIn extraído para proporcionar información detallada en las siguientes áreas y proporciona una respuesta estructurada con exactamente tres secciones:**\n\n1. **Información de la empresa**:\n   - Identificar y resumir la misión y visión declaradas de la empresa.\n   - Identificar cómo su misión o visión se alinea con sus actividades o servicios, si corresponde.\n   - Resumir los puntos clave o temas tratados en estas actualizaciones (por ejemplo, “Anunció una asociación con XYZ”, “Abrió una nueva oficina en Londres”, “Nuevas contrataciones en el último año”).\n   - Recuperar cualquier publicación o actualización reciente compartida por la empresa, junto con sus marcas de tiempo (por ejemplo, \"22h\", \"2w\").\n   - Destacar detalles específicos que indiquen expansión o crecimiento (por ejemplo, “Abrió una nueva oficina en Londres”, “Inició nuevas contrataciones en el último año”).\n\n2. **Modelo de negocio**:\n   - Modelo de negocio (B2B/B2C): Identificar si la empresa opera en un modelo B2B (empresa a empresa) o B2C (empresa a consumidor). Siempre se debe seleccionar UNA opción basada en el análisis.\n\n3. **Número de empleados**:\n   - Mencionar la industria de la empresa y su número aproximado de empleados, tal como se indica en el perfil.\n\n---\n\n**Requisitos de salida**:\n- **3 Secciones**: 1.) Información de la empresa, 2.) Modelo de negocio, 3.) Número de empleados. Asegúrate de que cada sección esté claramente etiquetada y en un formato consistente.\n- Asegúrate de que el análisis sea conciso, procesable y que evite información innecesaria.\n- Tus respuestas deben basarse únicamente en los datos de entrada, evitando suposiciones o relleno.\n- Incluye fechas siempre que sea posible para proporcionar contexto cronológico.\n- Siempre entrega todo como una cadena de texto.\n- Titulo todo el contenido como *Company LinkedIn*.\n- Nunca menciones, Shows, Eventos, Nominaciones como \"crecimiento reciente\".\n\n---\n\n**Por favor, formatea la respuesta como un objeto JSON con la siguiente estructura:**\n\n```json\n{\n    \"Información de la empresa\": {\n        \"Misión\": \"Inserta aquí la declaración de misión.\",\n        \"Visión\": \"Inserta aquí la declaración de visión.\",\n        \"Alineación con actividades\": \"Describe cómo las actividades se alinean con la misión.\",\n        \"Crecimiento reciente\": {\n            \"Detalles de expansión\": \"Describe cualquier expansión.\",\n            \"Menciones específicas\": \"Incluye cualquier mención específica de crecimiento.\"\n        }\n    },\n    \"Publicaciones y actualizaciones recientes\": {\n        \"Publicaciones\": [\n            {\n                \"contenido\": \"Incluye las publicaciones recientes aquí.\",\n                \"marca de tiempo\": \"Proporciona la marca de tiempo para la publicación.\"\n            }\n        ]\n    },\n    \"Modelo de negocio (B2B/B2C)\": \"Especifica si B2B o B2C.\",\n    \"Número de empleados\": \"Proporciona el número aproximado de empleados.\"\n}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        900,
+        340
+      ],
+      "id": "ce701fba-97cf-4d84-89e5-decff1262d8c",
+      "name": "Summarize + Relevancy - Achievements/News/Expansion",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "e4839ae7-a326-4aa3-9fa4-3b991b851c33",
+              "leftValue": "={{ $json.message.content['Modelo de negocio (B2B/B2C)'] }}",
+              "rightValue": "B2B",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1340,
+        340
+      ],
+      "id": "9a06cb5e-d1fe-44f1-aa8e-8240d4e49711",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Airtable2').item.json[\"Company Website\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1660,
+        260
+      ],
+      "id": "10af5de3-96d4-49b8-8415-6cb01a58e520",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "jsCode": "const htmlContent = $input.first().json.data; // Replace this with the field containing your HTML content\n\n// Function to strip HTML tags and clean the text\nconst extractPlainText = (html) => {\n    if (!html) return \"\";\n\n    // Remove script and style tags along with their content\n    const withoutScriptsAndStyles = html\n        .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, \"\")\n        .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, \"\");\n\n    // Remove all remaining HTML tags\n    const strippedText = withoutScriptsAndStyles.replace(/<\\/?[^>]+>/gi, \"\");\n\n    // Replace HTML entities with their plain-text equivalents\n    const decodedText = strippedText\n        .replace(/&nbsp;/gi, \" \")\n        .replace(/&amp;/gi, \"&\")\n        .replace(/&lt;/gi, \"<\")\n        .replace(/&gt;/gi, \">\")\n        .replace(/&quot;/gi, '\"')\n        .replace(/&#39;/gi, \"'\");\n\n    // Replace multiple spaces, tabs, and newlines with a single space\n    const cleanedText = decodedText.replace(/\\s+/gi, \" \").trim();\n\n    return cleanedText;\n}\n\n// Call the function to process the HTML content\nconst plainText = extractPlainText(htmlContent);\n\n// Return the plain text as the output of this node\nreturn {\n    plainText: plainText\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1920,
+        260
+      ],
+      "id": "fbfed2c0-e911-495f-bfcd-28be3b16a7ff",
+      "name": "Code2"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Eres un experto en análisis de negocios profesional y extracción de datos de sitios web. Tu tarea es analizar e interpretar la página de inicio extraída de un sitio web de una empresa para producir un informe completo y de alta calidad. Tus respuestas deben ser precisas, bien estructuradas y basadas completamente en los datos de entrada proporcionados, sin hacer suposiciones ni agregar detalles no respaldados. Enfócate en proporcionar ideas claras y profesionales adaptadas a los requisitos descritos a continuación.",
+              "role": "system"
+            },
+            {
+              "content": "=**Analiza la página de inicio extraída del sitio web de la empresa y proporciona un informe detallado y profesional cubriendo los siguientes puntos:**\n\n1. **Análisis de Producto/Servicio**\n   - Describe los productos o servicios de la empresa en detalle.\n   - Identifica su industria.\n   - Identifica a sus clientes ideales (ICP) (por ejemplo, pequeñas empresas, grandes empresas, consumidores, etc.).\n\n2. **Mensaje Principal/Propuesta de Valor**\n   - Resume el mensaje clave y la propuesta de valor de la empresa.\n   - Explica los problemas o puntos de dolor que intentan resolver para sus clientes.\n   - Menciona cómo se diferencian de sus competidores.\n\n3. **Análisis de Contenido**\n   - Recupera y enumera cualquier historia de éxito o caso de estudio mencionado en la página de inicio.\n   - Incluye fechas cuando estén disponibles para fines de clasificación de relevancia.\n\n**Proporciona una salida profesional y bien organizada, asegurándote de que cada sección se aborde en detalle y sin información innecesaria.**\n\n\n**#Notas**\n- Titula toda la salida como *Company Website*.\n- Si `{{ $json.plainText }}` está vacío o contiene códigos de error, indica que el sitio web no se pudo extraer correctamente."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        2240,
+        260
+      ],
+      "id": "271ccf06-2080-4429-963a-f2db619aadfc",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Collect the incoming data\nconst input1 = $input.first().json.message.content; // Extract the 'content' field\nconst input2 = $('Code2').first().json.plainText; // Access the 'plainText' field from the JSON output\n\n// Merge the inputs into one item\nreturn {\n    json: {\n        content: `${input1}\\n\\n${input2}`, // Combine the content with line breaks\n        source1: input1, // Include full details from input 1\n        source2: input2, // Include full details from input 2\n    }\n};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2800,
+        260
+      ],
+      "id": "aa82ccbe-6eb3-415f-800c-7cbd5259e940",
+      "name": "Code3"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Logro específico: {{ $json.message.content['Logro Específico'] }}\n\nNombre del líder: {{ $('Airtable2').item.json[\"Full Name\"] }}",
+        "hasOutputParser": true,
+        "messages": {
+          "messageValues": [
+            {
+              "message": "=Eres un experto en crear elogios atractivos y motivadores para correos fríos. Basado en la entrada \"Logro Específico\", escribe un comentario breve y educado sobre ellos o su negocio.\nLogro específico: {{ $json.message.content[\"Logro Específico\"] }}\n"
+            }
+          ]
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        2660,
+        540
+      ],
+      "id": "41705b8a-7121-469a-a905-235452840d6d",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        2520,
+        820
+      ],
+      "id": "7c4d3b82-b59d-418c-97b8-2999985ddf5f",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "apprWYFrxmj8XfzXW",
+          "mode": "list",
+          "cachedResultName": "Smythio",
+          "cachedResultUrl": "https://airtable.com/apprWYFrxmj8XfzXW"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tbl0Oj6GDgK0nEJAP",
+          "mode": "list",
+          "cachedResultName": "proyectos",
+          "cachedResultUrl": "https://airtable.com/apprWYFrxmj8XfzXW/tbl0Oj6GDgK0nEJAP"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Airtable2').item.json.id }}",
+            "Company Website Scrape": "={{ $('Code3').item.json.source1 }}",
+            "LinkedIn Company Scrape": "={{ $('Code3').item.json.source2 }}",
+            "Personalization": "={{ $json.text }}",
+            "Sumary": "={{ $('Edit Fields1').item.json.Resumen }}",
+            "Industry": "={{ $('Summarize Input').item.json.message.content[\"Tipo de Empresa\"] }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "CreatedTime",
+              "displayName": "CreatedTime",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Linkedin",
+              "displayName": "Linkedin",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Email Address",
+              "displayName": "Email Address",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company Name",
+              "displayName": "Company Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company Website",
+              "displayName": "Company Website",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Time At Company",
+              "displayName": "Time At Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "dateTime",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Lead Status",
+              "displayName": "Lead Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Frio",
+                  "value": "Frio"
+                },
+                {
+                  "name": "Tibio",
+                  "value": "Tibio"
+                },
+                {
+                  "name": "Caliente",
+                  "value": "Caliente"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LinkedIn Company Scrape",
+              "displayName": "LinkedIn Company Scrape",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company Website Scrape",
+              "displayName": "Company Website Scrape",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Industry",
+              "displayName": "Industry",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Location",
+              "displayName": "Location",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Sumary",
+              "displayName": "Sumary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "LinkedIn Organization URL",
+              "displayName": "LinkedIn Organization URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Personalization",
+              "displayName": "Personalization",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        3080,
+        540
+      ],
+      "id": "971a63a8-8b8c-4b7f-b0f8-38c1ba3cf1ce",
+      "name": "Airtable3",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "VA5rWhnxDSsLS3XP",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "**Eres un experto en analizar y sintetizar información empresarial para la generación de leads B2B. Tu tarea es analizar los datos de entrada del perfil de empresa en LinkedIn del lead y de su sitio web. Usa tu experiencia en el espacio B2B para obtener las respuestas más precisas y basadas en hechos. La salida debe estar estructurada, ser accionable y estar fundamentada en los datos proporcionados, sin inventar cifras ni hacer afirmaciones sin respaldo.**  \n\n### **Notas**  \n- Si, y solo si, los datos del sitio web de la empresa y su perfil de LinkedIn entran en conflicto, **SIEMPRE** prioriza la información del perfil de LinkedIn de la empresa.",
+              "role": "system"
+            },
+            {
+              "content": "=**Responde las siguientes preguntas de manera completa, manteniendo un tono profesional. Proporciona respuestas concisas, claras y perspicaces que puedan usarse directamente para redactar correos electrónicos efectivos:**  \n\n### **Preguntas de Análisis:**  \n- **Industria:**  \n  Define cuidadosamente la industria de la empresa.  \n\n- **Misión/Valores:**  \n  Resume la misión o los valores principales de la empresa.  \n\n- **Producto/Servicio:**  \n  Describe el producto o servicio principal que ofrece la empresa.  \n\n- **Resumen de Productos/Servicios:**  \n  Resume los productos/servicios principales en **máximo 4 palabras**. Este resumen se usará al final de una oración, por lo que la primera letra **nunca debe estar en mayúscula**. Debe ser **gramaticalmente correcto**.  \n\n- **Propuesta Única de Venta (USP):**  \n  Destaca la principal propuesta de valor única de la empresa.  \n\n- **Tipo de Empresa:**  \n  Identifica el **tipo EXACTO** de empresa según los datos de entrada. Sé lo más específico posible. **Máximo 5 palabras**.  \n  - Debe encajar en esta oración:  \n    *Acabamos de completar un proyecto increíble con una \"Tipo de Empresa\" en — ayudándolos a generar $100K/mes en ingresos en solo 3 meses.*  \n  - El \"Tipo de Empresa\" **DEBE** alinearse perfectamente con los \"Productos/Servicios\" identificados para esta empresa.  \n\n- **Público Objetivo, ¿cuáles son sus ICPs?**  \n  Identifica el público objetivo principal de la empresa.  \n\n- **Logro Específico:**  \n  - Destaca un logro notable de la empresa de {{ $('Airtable2').item.json['Full Name'] }}.  \n  - **Si se menciona un nombre personal en \"Logro Específico\", debe ser {{ $('Airtable2').item.json['Full Name'] }}.**  \n  - **Si NO, elige otro logro diferente.**  \n  - **El logro elegido no puede tener más de 9 meses.**  \n\n---\n\n**Por favor, formatea la respuesta como un objeto JSON con la siguiente estructura:**  \n\n```json\n{\n    \"Industria\": \"\",\n    \"Misión/Valores\": \"\",\n    \"Producto/Servicio\": \"\",\n    \"Resumen de Productos/Servicios\": \"\",\n    \"Propuesta Única de Venta (USP)\": \"\",\n    \"Tipo de Empresa\": \"\",\n    \"Público Objetivo\": \"\",\n    \"Logro Específico\": \"\"\n}\n```\n\n**Asegúrate de incluir todas las secciones, incluso si no hay información específica disponible. Para la información faltante, usa \"No especificado\".**"
+            },
+            {
+              "content": "=Company website: {{ $json.source1 }}\nCompany LinkedIn:  {{ $json.source2 }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        1920,
+        540
+      ],
+      "id": "a1a09269-6fa0-47b1-9ecc-0220d6a90fe3",
+      "name": "Summarize Input",
+      "credentials": {
+        "openAiApi": {
+          "id": "ISeoryrnEK9xlSkl",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cb5c90f3-5afe-4013-86af-bcc358c17407",
+              "name": "Resumen",
+              "value": "={{ $json.message.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2340,
+        540
+      ],
+      "id": "30809216-5b57-4924-9783-cbe069181617",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {
+    "Edit Fields": [
+      {
+        "json": {
+          "id_table": "tbl0Oj6GDgK0nEJAP",
+          "Base_id": "apprWYFrxmj8XfzXW"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Airtable",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable": {
+      "main": [
+        [
+          {
+            "node": "Airtable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Airtable2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Airtable2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code1": {
+      "main": [
+        [
+          {
+            "node": "Summarize + Relevancy - Achievements/News/Expansion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize + Relevancy - Achievements/News/Expansion": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Code2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code2": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Code3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code3": {
+      "main": [
+        [
+          {
+            "node": "Summarize Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Airtable3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarize Input": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a31d2854-fd86-49f3-8d57-d43f610cfc8f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "DDLlJGDhwKPauc03",
+  "tags": []
+}

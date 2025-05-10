@@ -1,0 +1,2510 @@
+{
+  "name": "Get Brand brief",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -220,
+        -40
+      ],
+      "id": "be52550e-4251-466f-a813-a1f6615397e2",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "content"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        220,
+        -40
+      ],
+      "id": "f1136b72-d689-4c57-bee5-e7c81bcd3d19",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a07613df-b958-42c9-9b7b-96a50692001e",
+              "name": "content",
+              "value": "={{ $json.content.join() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        440,
+        -40
+      ],
+      "id": "90f0bc4e-e954-4d6d-9b33-4451970c0cf3",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "block",
+        "operation": "getAll",
+        "blockId": {
+          "__rl": true,
+          "value": "1ab537910f9380158b56d4828dff9d3b",
+          "mode": "id"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 2.2,
+      "position": [
+        -20,
+        -40
+      ],
+      "id": "84c2ebbb-f4b9-47ac-ba72-06e77ff5dee3",
+      "name": "Notion1",
+      "credentials": {
+        "notionApi": {
+          "id": "CScxw9IqPulIT2XK",
+          "name": "Notion account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Notion1": [
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-806d-9d24-c896cf162383",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "1. Antecedentes del Autor"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8007-b84f-f12be6f4304e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Smith Carlos De la Cruz es un emprendedor apasionado por la tecnología, la inteligencia artificial y la automatización de negocios. Desde sus inicios, ha estado obsesionado con una sola pregunta: \"¿Cómo podemos hacer más con menos?\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e6-a4da-fef9483615e8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Con una mentalidad de optimización y escalabilidad, Smith se ha dedicado a descubrir cómo la IA puede ser utilizada para automatizar procesos, acelerar el crecimiento y eliminar las barreras que limitan la expansión de los negocios."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8009-9f4e-cccbcb36fff9",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Apasionado por la tecnología: Desde joven, ha explorado cómo la inteligencia artificial puede revolucionar la forma en que trabajamos y creamos empresas."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80b0-915e-e4bc27767075",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": " Enfocado en la automatización: Su misión es eliminar tareas repetitivas y reemplazarlas con sistemas inteligentes que operen sin fricción."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80b3-b0d5-f62ba14cbb4a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Comprometido con la escalabilidad: No cree en el crecimiento basado en más trabajo manual, sino en estrategias que permiten a los negocios crecer sin límites."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80db-b575-d04a554622ea",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Experiencia en Growth Marketing: Ha aprendido a utilizar la IA no solo para optimizar procesos internos, sino para crear estrategias de marketing que convierten más clientes sin gastar más dinero."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-808f-a713-fb6c0e97eb88",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Por qué fundó su agencia de AI Agents + Growth Marketing"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c7-9625-d004240d8a14",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Después de ver cómo muchas empresas luchaban por escalar debido a la falta de automatización, decidió crear una agencia especializada en agentes de IA y sistemas de crecimiento automatizados. Su enfoque no es solo implementar tecnología, sino transformar negocios en máquinas de ingresos que trabajan sin fricción y sin desperdicio de recursos."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e8-94d3-ff4e2a857d4b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Hoy, Smith lidera una agencia enfocada en ayudar a startups, negocios digitales y empresas en crecimiento a automatizar ventas, marketing y atención al cliente con inteligencia artificial. Su misión es clara: \"Si puedes automatizarlo, hazlo. Si no puedes, es porque aún no sabes cómo.\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8021-90bd-ca442b77af96",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "2. Visión General"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8037-8579-c970e3f73515",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Smythio es una agencia de vanguardia especializada en soluciones de automatización impulsadas por inteligencia artificial, diseñada para transformar procesos empresariales y liberar el potencial humano."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-804b-b792-d0314f810b8a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "3. Misión"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80b4-846b-fed13212623c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Las empresas que escalan más rápido en el futuro no lo harán con más empleados, sino con agentes de IA que trabajan 24/7 sin fricción."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-808c-9223-fad22ffa0ecd",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "4. Visión"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e5-b625-fbdc28f9e15e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Construimos agentes de IA que eliminan trabajo manual, optimizan ventas y marketing, y maximizan el crecimiento sin necesidad de más empleados."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8096-a93c-d943057c51c2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "5. Propuesta Única de Valor"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-801b-8eb4-daa8fc1c7342",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Tu equipo humano es lento y caro. Los agentes de IA trabajan sin descanso, responden clientes al instante y automatizan tareas repetitivas. Te ayudamos a integrarlos en tu negocio para que ganes más con menos esfuerzo."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e9-bc18-d674c3433343",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "6. Tagline/Slogan"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8014-9c4d-d78efd654a31",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "IA que vende, responde y escala por ti."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-809d-a740-d0a73d5c74c3",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "7. Valores de Marca"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80d5-8139-c6a0ab451c93",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Automatización Total: No optimizamos procesos, los eliminamos."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-801a-b0d3-c7ffac618a2b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Velocidad Extrema: La IA responde en segundos. Tu equipo no puede competir con eso."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-802a-8787-e50741eb10ec",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Crecimiento sin Fricción: Crecemos sin añadir más empleados."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80ac-80c8-e7e3a2d6732c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Optimización Continua: Lo que funciona hoy no será lo mejor mañana, por eso la IA debe aprender y evolucionar."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-808a-9222-cdb8aaf3151c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Rentabilidad Antes que Todo: No vendemos tecnología, vendemos dinero en el banco."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8054-99fc-c082972bcf64",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Transparencia Brutal: No prometemos magia, prometemos resultados reales."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80d5-9561-c94724ebcb03",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Mentalidad de Crecimiento: Si no estás escalando, estás muriendo."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80b8-b354-d3e6885e4c91",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "8. Personalidad de Marca"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8064-a3c5-fc397c7f5c69",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "column_list",
+          "column_list": {},
+          "root_id": "1ab537910f9380158b56d4828dff9d3b"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-801b-aa7f-c8ad389ae1fb",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "9. Nicho y Público Objetivo"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c3-a420-ce24e27d2650",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Empresas que quieren escalar sin contratar más empleados."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-803e-a78f-e8281a6ba2b2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Startups que buscan aumentar ingresos sin aumentar costos."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c0-af62-c2b2a6903723",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Empresas de ecommerce, SaaS y servicios que necesitan IA para mejorar su marketing y ventas."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-807d-8c4b-ce0db06d4d92",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Marketers que buscan automatizar adquisición y conversión con IA."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8066-ba4b-d749e6d5546c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Equipos de ventas que quieren sistemas que cierren clientes automáticamente."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a0-ae18-d4aa3c0ecae7",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Dolores"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c5-8d10-e377b24b651f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "No pueden escalar su negocio sin contratar más personas."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80dd-9814-c34713db3cfa",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Gastan demasiado en marketing sin obtener clientes calificados."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8039-bfeb-e41039371f25",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Sus equipos tardan demasiado en responder clientes y pierden oportunidades de venta."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80f4-9c26-e01a56c670ff",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Lo que buscan:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a0-9103-fd81cc81841e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Agentes de IA que vendan, respondan y conviertan 24/7."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-808d-86aa-e66d40e3df2a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Automatización de marketing que optimice anuncios y embudos en tiempo real."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a4-8966-e968604ce3e0",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Escalabilidad sin fricción: crecimiento sin más empleados."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8016-bf68-f15576387d9b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "10. Diferenciadores"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8005-acd1-e3d1041261d1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "IA Adaptativa: Nuestros algoritmos aprenden continuamente, optimizando procesos en tiempo real."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8079-a715-da3e96608af8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Integración Universal: Compatibilidad con más de 200 plataformas y sistemas empresariales."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8001-9b67-ea201f00698c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Consultoría Estratégica: No solo ofrecemos tecnología, sino también asesoramiento para transformación digital."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-804c-a07f-e8a554c1a94b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Modelo Híbrido: Combinamos soluciones en la nube con implementaciones on-premise según necesidades."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a0-9fce-e836372d37e2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "11. Voz y Tono"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8021-8748-e6820829923f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "callout",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Voz: Experta pero accesible, innovadora pero práctica."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a7-9f6c-ec41d38eb6fd",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "12. Mensajes Clave"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8011-9c13-c9f55d4a9761",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Automatización que evoluciona contigo\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8087-8760-f6984f4fb2d9",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"IA que trabaja para ti, no al revés\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8085-9bf5-eb8c9eb840c8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Del caos a la claridad: Procesos optimizados\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-804b-92b9-f8bf85cf6a01",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Libera el potencial humano mediante la automatización inteligente\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-800a-9f95-c9825ab2cda7",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "13. Arquitectura Visual"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8086-93d7-d7fe7df47d7f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Colores"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80fc-82be-c5a7c38d4ef2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": true,
+          "archived": false,
+          "in_trash": false,
+          "type": "column_list",
+          "column_list": {},
+          "root_id": "1ab537910f9380158b56d4828dff9d3b"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8006-bd34-c19e4695170b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_3",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Tipografía"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8062-baa7-dbf39e1f4a6e",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Títulos: Poppins (Bold) - Moderna, clara y tecnológica"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e7-bc27-d2f120dbf55b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Cuerpo: Inter (Regular) - Legible y profesional"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80da-bfda-e899444960b2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "14. Aplicaciones de Marca"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c5-b24e-fb7db1e8b895",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "La imagen de marca debe aplicarse consistentemente en:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8011-add2-ecfc83123d0b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Plataforma web y dashboard de clientes"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8005-8b5b-c4b3e7c177e4",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Materiales de marketing digital y físico"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-807e-9d9c-cb0c81d94119",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Comunicaciones con clientes"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8042-b064-e49b13afd898",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Presentaciones y propuestas"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e0-b7a6-cf28ef8e0520",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Documentación técnica"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8070-ac77-ddbb3330ba47",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "15. Temas y Objetivos del Contenido"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8081-891a-e8cef8aeed9d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Temas Principales"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8069-8e6b-d7673b26dfb5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Cómo los AI Agents pueden reemplazar equipos de soporte, ventas y marketing."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8015-9030-dca9efdb56f8",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Growth Marketing automatizado con IA (creación de contenido, anuncios y conversión)."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-807a-bc1d-f64bf6ec8af1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Cómo escalar un negocio con menos empleados y más automatización."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-803e-8a73-f8f944507632",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Casos de uso de AI Agents en eCommerce, SaaS y servicios."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-808b-aa69-e019f0f1b3c2",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Cómo hacer que la IA trabaje 24/7 para atraer y cerrar clientes."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8047-8718-e6b19fb5ee9d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Objetivos del Contenido"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80b6-89f7-da7c6ffe43ef",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Posicionar a la marca como líder en AI Agents para ventas y marketing"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80fd-9f2e-c4123fb8c362",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Demostrar con datos reales cómo la IA aumenta ingresos y reduce costos."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80f1-985c-c9ae217df5ca",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Convertir seguidores en clientes con sistemas listos para implementar."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80cb-b264-e57deaecff67",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Educar sin bullshit → Explicaciones claras, prácticas y accionables."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80ac-b978-fef5d732b370",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Vender sin vender → Mostrar cómo la IA resuelve problemas de negocio."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80eb-9bcd-c6084b2995cc",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "16. Desagrados y Oponentes "
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8065-b9a7-dc63a60317c4",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Lo que NO toleramos"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80ff-990b-f6a7a50254ab",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"La IA es hype\" → No, la IA ya está reemplazando equipos humanos."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8007-be62-d49f20ff3990",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Necesitas más empleados para escalar\" → No, necesitas mejor automatización."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c8-a823-dced941aaf60",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"El marketing todavía depende de la creatividad humana\" → Falso. La IA ya genera contenido y optimiza anuncios mejor que muchas agencias."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-806e-a4fa-e792e35451bb",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Respuestas lentas = Dinero perdido → Si un cliente espera respuesta, ya perdiste la venta."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80fc-aeea-fe2de4a4131a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Decisiones sin datos → Apostar en el negocio sin IA es suicidio financiero."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-809e-9ad4-d4c9092eb875",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "17. KPIs de Marca"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80e2-9b9b-f1236510c8f6",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Reconocimiento de marca en la industria tecnológica"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80c6-b73e-fa1f46fd659c",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Tasa de conversión de leads a clientes"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80d8-b9e1-df9eacd0f686",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Índice de satisfacción del cliente (NPS)"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80cc-a4b4-caf24ba16901",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Tasa de retención de clientes"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8052-9087-e27db0c6f14a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Menciones positivas en medios especializados"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-803b-9d26-d3aa5f598f31",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "18. Productos y Servicios Asociados"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8004-9af3-e1ce61f471bf",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "AI Agents para Conversaciones: Chatbots avanzados que responden clientes en segundos y cierran ventas."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80fe-8893-e608964e9a5a",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Growth Marketing Automatizado: Creación y optimización de contenido, anuncios y embudos con IA."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80cc-be15-e5a1060b4415",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "AI Agents para Ventas: Bots que gestionan prospectos, hacen seguimiento y convierten clientes en automático."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8095-91a8-ddbfad464163",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Optimización con IA: Sistemas que analizan datos en tiempo real y ajustan estrategias de crecimiento."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80cf-961c-e568a7c4aa2d",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "19. Mensajes Clave"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80d2-8c92-cb6a77e7da07",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Los negocios que crecen más rápido no contratan más empleados, usan más IA.”"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-807c-ba63-cf7d4abf517b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"La IA no reemplazará a los humanos, pero los humanos que usan IA reemplazarán a los que no la usan.”"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8077-a9a6-d118aa0e62ee",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Si tu negocio todavía depende de que las personas respondan mensajes manualmente, estás perdiendo dinero.”"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-801e-bb7b-c230299839b5",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "\"Si sigues invirtiendo en marketing sin IA, estás desperdiciando la mitad de tu presupuesto.”"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-804b-8a06-e0075c585be1",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "heading_2",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "20. Ejemplo de Contenido Ideal"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a9-9925-de0d3c113812",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Ejemplo de post para redes sociales:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-804e-9cd8-c14b2e671f1f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Si estás contratando más empleados para responder clientes, ya perdiste. Un agente de IA lo hace en segundos, sin sueldo y sin vacaciones."
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8088-85ae-f5489eb50c3f",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Ejemplo de mensaje de venta:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-802d-8956-e2bbeedca9cd",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Tu competencia ya está usando IA para vender 24/7. No necesitan breaks, no se equivocan y no te piden aumento. ¿Vas a quedarte atrás?"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-80a1-84d5-d37b1e1b8236",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "paragraph",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Ejemplo de blog:"
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8021-9c09-c8720b0f26cd",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Título: \"Cómo la IA Está Reemplazando Equipos de Marketing y Ventas (Y Cómo Usarla a Tu Favor)\""
+        }
+      },
+      {
+        "json": {
+          "object": "block",
+          "parent_id": "1ab537910f9380158b56d4828dff9d3b",
+          "id": "1ab53791-0f93-8007-8d37-ea62eae87f7b",
+          "parent": {
+            "type": "page_id",
+            "page_id": "1ab53791-0f93-8015-8b56-d4828dff9d3b"
+          },
+          "last_edited_by": {
+            "object": "user",
+            "id": "143d872b-594c-813f-92b7-0002a06f1540"
+          },
+          "has_children": false,
+          "archived": false,
+          "in_trash": false,
+          "type": "bulleted_list_item",
+          "root_id": "1ab537910f9380158b56d4828dff9d3b",
+          "content": "Resumen: \"Si crees que la IA no puede hacer marketing ni cerrar ventas, ya perdiste. Te mostramos cómo los agentes de IA ya están optimizando embudos, escribiendo anuncios y respondiendo clientes en tiempo récord.\""
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Notion1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notion1": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "40263840-a381-4f03-8a2b-cdc8e264e466",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "dtVbgyzBTF6VwNnA",
+  "tags": []
+}

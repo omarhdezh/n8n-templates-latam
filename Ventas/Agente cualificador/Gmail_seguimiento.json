@@ -1,0 +1,110 @@
+{
+  "name": "Gmail seguimiento",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "jsonExample"
+      },
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        100,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "draft",
+        "subject": "={{ $json.title }}",
+        "message": "={{ $json.html_message }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        600,
+        340
+      ],
+      "id": "37698037-fc93-4138-8b4a-1e1002febf01",
+      "name": "Gmail",
+      "webhookId": "5125e3d5-e767-4b1b-92d3-db06513e89c9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "QmtuulSEYJYXwzXq",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtener los datos de entrada\nconst inputData = $input.first().json.query;\n\n// Si el campo `query` es un string JSON, parsearlo a objeto\nlet parsedData;\ntry {\n    parsedData = JSON.parse(inputData);\n} catch (error) {\n    throw new Error(\"Error al parsear el campo 'query': \" + error.message);\n}\n\n// Extraer los valores esperados\nconst email = parsedData.email || \"\";\nconst title = parsedData.title || \"\";\nconst htmlMessage = parsedData.html_message || \"\";\n\n// Retornar los valores separados\nreturn [\n    {\n        email: email,\n        title: title,\n        html_message: htmlMessage\n    }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        360,
+        340
+      ],
+      "id": "91a01aae-3080-4278-8df5-0cae1c03ae7c",
+      "name": "Code"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "query": "{\"email\":\"smthdlcrz@gmail.com\",\"title\":\"Seguimiento Proyecto Automatización\",\"html_message\":\"Hola,<br/><br/>Gracias por completar el formulario de interés. Hemos recibido su solicitud para el proyecto y estamos analizando la información proporcionada para generar una cotización personalizada o, en su caso, agendar una cita para profundizar sus necesidades.<br/><br/>Nos pondremos en contacto con usted en la brevedad. Mientras tanto, si tiene alguna pregunta, no dude en comunicarse con nosotros a carla@innovatech.com.<br/><br/>Saludos cordiales,<br/>Carla<br/>Innovatech - Agencia de Automatización\"}"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        []
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "965b5413-6def-4694-a257-22cb1b04a283",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "44babe1b93e0854d9121d3a07b3fb37512f05d2ce7806af059067e8762737492"
+  },
+  "id": "avln7iDbQEeQuwmK",
+  "tags": [
+    {
+      "createdAt": "2025-02-14T21:13:45.609Z",
+      "updatedAt": "2025-02-14T21:13:45.609Z",
+      "id": "tP4cGyIPJNqUMris",
+      "name": "Smythio"
+    }
+  ]
+}
