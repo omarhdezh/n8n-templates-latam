@@ -1,0 +1,601 @@
+{
+  "name": "Asistente personal",
+  "nodes": [
+    {
+      "parameters": {
+        "model": "gpt-4o",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        20,
+        260
+      ],
+      "id": "33754760-6867-4cf0-9f8e-1c950640ecbb",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ipi11GX8ZESSCU5s",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.pregunta }}",
+        "options": {
+          "systemMessage": "=Eres un agente de IA asistente personal diseñado para manejar varias tareas de manera eficiente. Tu función principal es gestionar los contactos, correos electrónicos y eventos del calendario del usuario. Tienes acceso a tres herramientas que te ayudarán a cumplir con las solicitudes:\n\nContactos: Utilízala cuando necesites buscar información de contacto como una dirección de correo electrónico. Debe utilizar esta herramienta ANTES de enviar un correo electrónico o ANTES de obtener correos electrónicos.\n\nAgente de Calendario: Utilízala para programar, actualizar o gestionar eventos de calendario.\n\nAgente de Búsqueda: Utilízala para proporcionar una respuesta a la pregunta del usuario, que suele ser una pregunta de carácter general. Como por ejemplo: \"¿Cuál es la montaña más alta del mundo?\".\n\nAsistente Gym: úsalo cada vez que recibas un mensaje como \"sentadilla 100 kg 6 x 6\" o \"pres plano 50kg 4x5\"\n\nCuando una tarea requiera el uso de una o varias de estas herramientas, asegúrate de identificar cuál es la más adecuada, transmite los detalles pertinentes y ejecuta las acciones necesarias para completar la tarea. Tu objetivo es ser proactivo, preciso y organizado en la gestión de estos recursos para proporcionar una experiencia sin problemas para el usuario. Mete los enlaces de los eventos con un link para acceder al evento en el calendario.\n\nEsta es la fecha/hora actual: {{ $now.setZone('America/Buenos_Aires') }}\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        220,
+        -60
+      ],
+      "id": "0b710213-b1df-49b6-9a5c-472af70b375a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -820,
+        -40
+      ],
+      "id": "bf672541-019e-44b3-adc0-f43894ac26b9",
+      "name": "Telegram Trigger",
+      "webhookId": "2e42cc38-2eb1-46ca-a9a8-32d1e19a0d29",
+      "credentials": {
+        "telegramApi": {
+          "id": "gnFzGWyvfVjA7r0W",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        800,
+        -60
+      ],
+      "id": "87d4ae8e-fb9c-4e57-af1c-fa1e67ea57ab",
+      "name": "Telegram",
+      "webhookId": "8adc8f3c-3bb3-4f6a-8462-26df56719337",
+      "credentials": {
+        "telegramApi": {
+          "id": "gnFzGWyvfVjA7r0W",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "AgenteBusqueda",
+        "description": "Usalo para sacar dudas o buscar en la web",
+        "workflowId": {
+          "__rl": true,
+          "value": "aI4KAUoso2iDBMa8",
+          "mode": "list",
+          "cachedResultName": "Agente busqueda"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        540,
+        260
+      ],
+      "id": "cc3dd556-bbf9-407a-be49-4aacec3221da",
+      "name": "Agente busqueda"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.pregunta }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        180,
+        260
+      ],
+      "id": "5e73cfda-bbcb-4cf3-ad3b-4a73670bf3f5",
+      "name": "Memoria"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.voice.file_unique_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Voz"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "ff442561-9101-408c-8fbd-90df520798fe",
+                    "leftValue": "={{ $json.message.voice.file_unique_id }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notExists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Texto"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -600,
+        -40
+      ],
+      "id": "0ba27250-ec61-40a5-afc7-f4cdba9ed474",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5cf1398d-a314-4c52-a068-e651f6b6729b",
+              "name": "pregunta",
+              "value": "={{ $json.message.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -360,
+        100
+      ],
+      "id": "d6d279ea-0acf-4ca0-9821-164439dc853f",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $json.message.voice.file_id }}"
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -420,
+        -200
+      ],
+      "id": "e2850f4f-09ba-4725-be01-03234060f670",
+      "name": "Descargar audio",
+      "webhookId": "5302e8b5-8b7a-4e70-a89a-949d10896ca3",
+      "credentials": {
+        "telegramApi": {
+          "id": "gnFzGWyvfVjA7r0W",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "binaryPropertyName": "=data",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        -220,
+        -200
+      ],
+      "id": "6403be12-2495-4ea8-80e2-55102b83ea54",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ipi11GX8ZESSCU5s",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9ae09557-2261-408f-b443-a634df0c7925",
+              "name": "pregunta",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -20,
+        -200
+      ],
+      "id": "2af703f7-2aac-454a-af0d-673df744c4ef",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "name": "Audio",
+        "description": "llama a esta tool cuando te pida audio el usuario "
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.1,
+      "position": [
+        680,
+        260
+      ],
+      "id": "723573fa-3c54-41d4-bba1-949a630eef11",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=eres el encargado de resumir el mesaje enviado por un asistende para poder enviarlo por audio, teniendo en cuenta esto solo deves devolver el texto plano, se claro y consiso recuerda que lo que tu resumas se enviara en formato audio a una persona que necesita tu ayuda, por lo tanto no envies informacion inecesaria como descripciones, o links, solo horarios y titulo de la reunion y en caso de ser otra informacion solo resumela\n\nejemplo \n\ninput \n\nAquí tienes la lista de eventos programados para hoy, 12 de febrero de 2025:\\n\\n1. **Evento:** [Qivox Ambrosio - Boxeo](https://www.google.com/calendar/event?eid=XzZncGs0aGhwODhvazZiYTU2b3IzaWI5azZzbzNlYjlwNjBxazRiYTU2MHNrNGdxNjg4b2pnZDlvODQgcGVyb3R0aWpvYXF1aW40NEBt) \\n **Descripción:** En esta clase vas a trabajar las técnicas y entrenamiento del boxeo, mejorando la coordinación, la fuerza, la velocidad, la resistencia, la concentración, el cardio, la seguridad, etc. Aprenderás a boxear evitando el combate, ya que el objetivo no es el enfrentamiento sino el entrenamiento. \\n **Inicio:** 21:...\n\n\nOutput \n\nEstos son tus eventos programados para hoy \n\nBoxeo qivox ambbrosio a las 21 \n\n",
+              "role": "assistant"
+            },
+            {
+              "content": "={{ $json.output }}",
+              "role": "assistant"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        1160,
+        -60
+      ],
+      "id": "f5a73f7a-1d84-4b03-a437-a8426663bd54",
+      "name": "OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ipi11GX8ZESSCU5s",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "input": "={{ $json.message.content }}",
+        "options": {
+          "response_format": "mp3"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.7,
+      "position": [
+        1520,
+        -60
+      ],
+      "id": "9aff62b5-a82b-4d81-adea-abe6b549aa7f",
+      "name": "OpenAI2",
+      "credentials": {
+        "openAiApi": {
+          "id": "Ipi11GX8ZESSCU5s",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAudio",
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "binaryData": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1740,
+        -60
+      ],
+      "id": "99728e8a-c120-41a8-98c6-08b07ab5db6b",
+      "name": "Telegram1",
+      "webhookId": "4f33ca39-72cf-46b9-b345-fe003320303d",
+      "credentials": {
+        "telegramApi": {
+          "id": "gnFzGWyvfVjA7r0W",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "AsistentoGym",
+        "description": "llama a este asistente cada vez que recibas un mensaje como \nsentadilla 100 kg 6x6,\npeso muerto 20kg 4 x 5 \n\ntambien usala si la persona te dice que quiere ver sos levantamientos on pesos de una fecha \n\nenvíale a esta herramienta el mensaje tal cual del usuario ",
+        "workflowId": {
+          "__rl": true,
+          "value": "UVq3kaIKA14n71ag",
+          "mode": "list",
+          "cachedResultName": "Asistente Gym"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        800,
+        260
+      ],
+      "id": "a71413af-8859-4517-9897-e34082cf0378",
+      "name": "AsistenteGym"
+    },
+    {
+      "parameters": {
+        "name": "AgenteCalendario",
+        "description": "Llama a esta herramienta cada vez que necesites usar el calendario, envíale toda la información necesaria.",
+        "workflowId": {
+          "__rl": true,
+          "value": "b97GxFVm1QZBZRLA",
+          "mode": "list",
+          "cachedResultName": "Agente Calendario"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        380,
+        260
+      ],
+      "id": "bc2d4b5c-570c-4b2b-bca3-2127974a489e",
+      "name": "Agente Calendario"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente busqueda": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Descargar audio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar audio": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "OpenAI2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI2": {
+      "main": [
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AsistenteGym": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente Calendario": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "87836cdd-a9e5-42ee-b68c-223a796dfa82",
+  "meta": {
+    "instanceId": "6706e7927f78c867476b989a37885bd3d67e65333bfeebec48fd077abd1eb7cb"
+  },
+  "id": "m4lzoAHXUQcYBnOE",
+  "tags": []
+}

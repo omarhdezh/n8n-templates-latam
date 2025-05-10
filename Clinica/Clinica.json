@@ -1,0 +1,699 @@
+{
+  "name": "Clinica",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body.message.text }}",
+        "options": {
+          "systemMessage": "=# Rol\n\nEres un **Agente de IA especializado**, encargado de optimizar la interacción entre los clientes y la clínica dental mediante el uso integral de las herramientas `Agente_calendario` y `base de datos`.  \nTu función es clave para facilitar un servicio excepcional en:\n\n- La gestión y consulta de citas dentales.  \n- La provisión de información detallada del negocio.\n\n**Fecha y hora actual:** `{{ $now.setZone('America/Buenos_Aires') }}`\nEl día de la semana es: `{{ $now.setZone('America/Buenos_Aires').weekdayLong }}`\n\n\n---\n\n# Instrucción\n\nUtiliza eficientemente la herramienta `Agente_calendario` y la `base de datos` para ofrecer un servicio de alto nivel en:\n\n- La gestión de citas.  \n- La respuesta a consultas detalladas sobre el negocio, incluyendo precios, horarios y servicios disponibles.\n\n## Debes:\n- Gestionar las citas con precisión y eficacia.  \n- Proporcionar respuestas informativas basadas en los datos del negocio.\n\n---\n\n# 🧭 Pasos\n\n## 🔹 Inicio\n\nSaluda al cliente con amabilidad, mostrando total disposición para asistir en sus necesidades relacionadas con la gestión de citas o consultas sobre el negocio.\n\n---\n\n## 🔹 Identificación del cliente\n\nSolicita el **número de documento del cliente** de manera cortés para una identificación efectiva en el sistema.\n\n---\n\n## 🔹 Acción a realizar\n\nAtiende las necesidades específicas del cliente, que pueden incluir:\n\n- Consulta de disponibilidad y **agendamiento de citas** mediante `Agente_calendario`.\n- **Modificación o cancelación** de citas existentes.\n- Provisión de **información detallada** sobre precios, servicios y horarios a través de la `base de datos`.\n\n---\n\n## 🔹 Confirmación y asistencia adicional\n\nConfirma con el cliente la acción realizada y **ofrece asistencia adicional si es necesario**, garantizando una experiencia positiva y satisfactoria.\n\n---\n\n# 🎯 Objetivo Final\n\nMejorar significativamente la **comunicación y gestión de citas dentales**, aprovechando al máximo las herramientas `Agente_calendario` y `base de datos`, para proporcionar un proceso de atención al cliente **fluido, informativo y eficiente** de inicio a fin.\n\n---\n\n# ❗ Limitaciones\n\nEste agente se enfoca únicamente en el uso efectivo de `Agente_calendario` y `base de datos` para:\n\n- Atender las necesidades de gestión de citas.\n- Responder consultas informativas de los clientes.\n\nSiempre manteniendo una atención detallada en **las preferencias del cliente** y la **información específica del negocio**.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.8,
+      "position": [
+        280,
+        100
+      ],
+      "id": "68e61375-e9ce-4c34-b437-214160d3e8c2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.body.message.from.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        280,
+        320
+      ],
+      "id": "763a190c-d32e-4a3f-9e5d-c0283ae6c588",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "lzXLJIAV5Mw450JJ",
+          "name": "Postgres supabase"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        160,
+        320
+      ],
+      "id": "3a1601b4-87dd-4c11-8e1d-758ba2bd9be4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JLs5AjaXpLGWt3ki",
+          "name": "OpenAi GOLA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "63ed59e3-906b-40c9-9159-ce57ebd78dda",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -40,
+        100
+      ],
+      "id": "02724a8d-2177-47b5-a968-e83292e2b25e",
+      "name": "Webhook",
+      "webhookId": "63ed59e3-906b-40c9-9159-ce57ebd78dda"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $json.message.content.mensaje1 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        -100
+      ],
+      "id": "8695dafb-1a91-4905-a3fb-ab321487bdc1",
+      "name": "Telegram",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Agente_calendario",
+        "description": "Llama a esta herramienta cada vez que necesites tareas relacionas con el calendario como, ver disponibilidad, cambiar un turno, dar un turno, buscar turno, cancelar turno. Simplemente, explícale lo que necesitas, ej: \"ver próxima disponibilidad\"",
+        "workflowId": {
+          "__rl": true,
+          "value": "If4oj9UdoHxzCDav",
+          "mode": "list",
+          "cachedResultName": "Agente calendario"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        420,
+        320
+      ],
+      "id": "61e9babd-5b6e-4c04-ba44-6f696ce5c7fe",
+      "name": "Agente calendario"
+    },
+    {
+      "parameters": {
+        "tableName": {
+          "__rl": true,
+          "value": "clinica",
+          "mode": "list",
+          "cachedResultName": "clinica"
+        },
+        "options": {
+          "queryName": "match_clinica"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1,
+      "position": [
+        436,
+        522.5
+      ],
+      "id": "ed247561-2374-4357-8595-4b6551894d7f",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "aAi23lMmxLjnykSy",
+          "name": "Supabase server"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        524,
+        720
+      ],
+      "id": "dbbc5e66-3b83-41e8-bebd-6e97af8bcfff",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "JLs5AjaXpLGWt3ki",
+          "name": "OpenAi GOLA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        732,
+        520
+      ],
+      "id": "85e6f4de-ab6c-4c25-b6e9-89ecdb79a90e",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "JLs5AjaXpLGWt3ki",
+          "name": "OpenAi GOLA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "Base_de_datos",
+        "description": "Usa esta herramienta para acceder a toda la información de la clínica como horarios precios y preguntas frecuentes"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolVectorStore",
+      "typeVersion": 1,
+      "position": [
+        540,
+        322.5
+      ],
+      "id": "2cc208f5-440a-4e26-abb1-423e2cc4f2e8",
+      "name": "Vector store tool"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.message.content.cantidad_de_mensajes }}",
+                    "rightValue": 1,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    },
+                    "id": "b907679c-7f5f-4f6e-b8f5-7e41c90f9704"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "1 msg"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "51ac9eba-75f4-457f-a086-6cd4e3bcb1a1",
+                    "leftValue": "={{ $json.message.content.cantidad_de_mensajes }}",
+                    "rightValue": 2,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "2 msg"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "a888e835-07b4-4ee8-9b68-e46a97b82eec",
+                    "leftValue": "={{ $json.message.content.cantidad_de_mensajes }}",
+                    "rightValue": 3,
+                    "operator": {
+                      "type": "number",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "3 msg"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1308,
+        100
+      ],
+      "id": "791d5ef5-f97e-4432-aee1-c230667d4251",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $json.message.content.mensaje1 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        100
+      ],
+      "id": "2e10c1cd-0e56-4f2e-8433-428db363fd4d",
+      "name": "Telegram1",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $('Switch').item.json.message.content.mensaje2 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1740,
+        100
+      ],
+      "id": "cd67c8b1-8fc7-4694-bde9-03737c9ead52",
+      "name": "Telegram2",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=**Rol**  \nEres un especialista encargado de transformar consultas complejas en información claramente estructurada.\n\n---\n\n**Instrucción**  \nRecibirás un mensaje de una secretaria de clínica dental en formato Markdown (con sus respectivas secciones y backticks). Tu tarea es determinar si dicho mensaje debe dividirse en uno, dos o tres mensajes independientes para mejorar su claridad. \n\n---\n\n**Importante**  \n- El contenido y el formato (incluyendo los backticks) **ya vienen en Markdown** y **no debes modificarlos**.  \n- Debes conservar y trasladar íntegramente la estructura y el texto original, **sin cambiar ni un carácter**.  \n- Si decides fragmentar el mensaje, cada parte debe **mantener la porción exacta del Markdown original**.  \n\nEl resultado final deberá ser un objeto JSON que contenga:  \n  - `cantidad_de_mensajes`: 1, 2 o 3, según corresponda.  \n  - `mensaje1`, `mensaje2`, `mensaje3`: cada uno con la parte correspondiente **en el mismo formato Markdown recibido**, sin alteraciones. Solo incluir `mensaje2` o `mensaje3` si corresponden.\n\n---\n\n## Ejemplos de entrada y salida\n\n### Ejemplo 1 (2 mensajes)\n\n**Input (en Markdown)**\n\n```text\n```markdown\nAquí tienes los precios para los tratamientos de ortodoncia:\n\n- Consulta inicial para ortodoncia (brackets tradicionales): $8,000\n- Colocación de brackets metálicos: desde $90,000 por arcada\n- Consulta inicial para ortodoncia invisible (Invisalign): $12,000\n\nSi necesitas más información o agendar una cita, aquí estoy.\nswift\nCopiar\nEditar\n\n**Output (JSON)**\n\n```json\n{\n  \"cantidad_de_mensajes\": 2,\n  \"mensaje1\": \"Aquí tienes los precios para los tratamientos de ortodoncia:\\n\\n- Consulta inicial para ortodoncia (brackets tradicionales): $8,000\\n- Colocación de brackets metálicos: desde $90,000 por arcada\\n- Consulta inicial para ortodoncia invisible (Invisalign): $12,000\\n\",\n  \"mensaje2\": \"Si necesitas más información o agendar una cita, aquí estoy.\\n\"\n}\nObserva que en el output se mantuvo el texto original y su formato Markdown exacto.\n\nEjemplo 2 (1 mensaje)\nInput (en Markdown)\n\ntext\nCopiar\nEditar\n```markdown\n¿Tenés turnos disponibles esta semana?\njavascript\nCopiar\nEditar\n\n**Output (JSON)**\n\n```json\n{\n  \"cantidad_de_mensajes\": 1,\n  \"mensaje1\": \"¿Tenés turnos disponibles esta semana?\\n\"\n}\nAquí no se dividió, porque era un mensaje muy breve; se conserva tal cual.\n\n\n#Ejemplo 3\n\nInput (en Markdown)\n\ntext\nCopiar\nEditar\n```markdown\nLa clínica dental ofrece los siguientes servicios:\n\n1. Retiro de brackets: Extracción, limpieza post-tratamiento y contención - 1 h, $30,000.\n2. Caries (empaste simple): Tratamiento de caries y reconstrucción con resina - 45 min, $9,000.\n3. Implantes dentales: Reemplazo de piezas dentales con implantes de titanio - 2 h, desde $100,000.\n4. Extracción de muelas: Extracción simple o compleja según el caso - 1 h, desde $12,000.\n5. Atención a niños: Control, limpieza y educación para niños - 30 min, $6,000.\n6. Placa de bruxismo: Placa personalizada para dormir - 2 citas, $45,000.\n7. Control mensual de ortodoncia: Revisión y ajuste de brackets - 20-30 min, $6,000.\n8. Limpieza dental: Higiene bucal profesional con ultrasonido - 30 min, $7,000.\n9. Blanqueamiento dental: Tratamiento con gel y luz LED - 1 h, $22,000.\n10. Ortodoncia (Brackets tradicionales): Evaluación, instalación y seguimiento mensual - consulta inicial $8,000, colocación completa por arcada desde $90,000.\n11. Ortodoncia invisible (Invisalign): Tratamiento con alineadores transparentes - consulta inicial $12,000.\n\nSi deseas más información sobre algún servicio o si estás interesado en agendar una cita, ¡házmelo saber!\n\n**Output (JSON)**\n\n{\n  \"cantidad_de_mensajes\": 3,\n  \"mensaje1\": \"```markdown\\nLa clínica dental ofrece los siguientes servicios:\\n\\n1. Retiro de brackets: Extracción, limpieza post-tratamiento y contención - 1 h, $30,000.\\n2. Caries (empaste simple): Tratamiento de caries y reconstrucción con resina - 45 min, $9,000.\\n3. Implantes dentales: Reemplazo de piezas dentales con implantes de titanio - 2 h, desde $100,000.\\n4. Extracción de muelas: Extracción simple o compleja según el caso - 1 h, desde $12,000.\\n```\",\n  \n  \"mensaje2\": \"```markdown\\n5. Atención a niños: Control, limpieza y educación para niños - 30 min, $6,000.\\n6. Placa de bruxismo: Placa personalizada para dormir - 2 citas, $45,000.\\n7. Control mensual de ortodoncia: Revisión y ajuste de brackets - 20-30 min, $6,000.\\n8. Limpieza dental: Higiene bucal profesional con ultrasonido - 30 min, $7,000.\\n```\",\n\n  \"mensaje3\": \"```markdown\\n9. Blanqueamiento dental: Tratamiento con gel y luz LED - 1 h, $22,000.\\n10. Ortodoncia (Brackets tradicionales): Evaluación, instalación y seguimiento mensual - consulta inicial $8,000, colocación completa por arcada desde $90,000.\\n11. Ortodoncia invisible (Invisalign): Tratamiento con alineadores transparentes - consulta inicial $12,000.\\n\\nSi deseas más información sobre algún servicio o si estás interesado en agendar una cita, ¡házmelo saber!\\n```\"\n}\nPasos a seguir\nLee cuidadosamente el mensaje en Markdown que recibes.\n\nDecide si se necesita dividir ese mensaje en 1, 2 o 3 fragmentos para mayor claridad.\n\nNo modifiques el texto ni el formato (backticks, listas, títulos, etc.).\n\nDevuelve el resultado como un objeto JSON válido, usando las claves solicitadas.\n\nObjetivo Final\nOptimizar la claridad de la comunicación sin alterar el contenido ni el formato original en Markdown. Cuando sea preciso, divide el mensaje en uno, dos o tres fragmentos, retornándolos en un único objeto JSON.",
+              "role": "system"
+            },
+            {
+              "content": "={{ $json.output }}"
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        860,
+        100
+      ],
+      "id": "f33d6a47-2113-4e43-8239-ec1caa82db03",
+      "name": "OpenAI",
+      "retryOnFail": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "JLs5AjaXpLGWt3ki",
+          "name": "OpenAi GOLA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $json.message.content.mensaje1 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1560,
+        300
+      ],
+      "id": "50db2d9a-a199-4f3a-bbcb-6ae9cce1be89",
+      "name": "Telegram3",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $('Switch').item.json.message.content.mensaje2 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1740,
+        300
+      ],
+      "id": "0da92fcd-a30a-4378-8f2b-97660c2337e0",
+      "name": "Telegram4",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Webhook').item.json.body.message.from.id }}",
+        "text": "={{ $('Switch').item.json.message.content.mensaje3 }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1920,
+        300
+      ],
+      "id": "0821cda0-75c1-48d5-9616-daffcd0fe1b6",
+      "name": "Telegram5",
+      "webhookId": "387bd818-3ccd-4255-acd0-0d194885de08",
+      "credentials": {
+        "telegramApi": {
+          "id": "Q10Qk5NwYyofUzj1",
+          "name": "Clinica"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Webhook": [
+      {
+        "json": {
+          "headers": {
+            "host": "bascwebhook.basconiagenci.top",
+            "content-length": "295",
+            "accept-encoding": "gzip, deflate",
+            "content-type": "application/json",
+            "x-forwarded-for": "91.108.5.100",
+            "x-forwarded-host": "bascwebhook.basconiagenci.top",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "1ad7cc71b87d",
+            "x-real-ip": "91.108.5.100"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "update_id": 132359824,
+            "message": {
+              "message_id": 77,
+              "from": {
+                "id": 1803148796,
+                "is_bot": false,
+                "first_name": "Joaquin",
+                "last_name": "Perotti",
+                "language_code": "es"
+              },
+              "chat": {
+                "id": 1803148796,
+                "first_name": "Joaquin",
+                "last_name": "Perotti",
+                "type": "private"
+              },
+              "date": 1743801873,
+              "text": "que servicios ofrecen?"
+            }
+          },
+          "webhookUrl": "https://bascwebhook.basconiagenci.top/webhook/63ed59e3-906b-40c9-9159-ce57ebd78dda",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agente calendario": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store1": {
+      "ai_vectorStore": [
+        [
+          {
+            "node": "Vector store tool",
+            "type": "ai_vectorStore",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Vector store tool",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Vector store tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram1": {
+      "main": [
+        [
+          {
+            "node": "Telegram2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram3": {
+      "main": [
+        [
+          {
+            "node": "Telegram4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram4": {
+      "main": [
+        [
+          {
+            "node": "Telegram5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "f3bcc1d8-f23d-41a2-afc9-f0537bb3e72f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "03c5c3c59a4971776808a7b96dbe928cce17180dcaa29ee8287c1f6efdde7df1"
+  },
+  "id": "6RA26LItdVAlQ847",
+  "tags": [
+    {
+      "createdAt": "2025-03-20T22:50:54.561Z",
+      "updatedAt": "2025-03-20T22:50:54.561Z",
+      "id": "uvoT47r5572KPyZ7",
+      "name": "CLINICA"
+    }
+  ]
+}

@@ -1,0 +1,309 @@
+{
+  "name": "Agente calendario",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4d5ba5a8-0268-41cc-a8c2-a2527f3ee447",
+      "name": "Execute Workflow Trigger"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1,
+      "position": [
+        160,
+        280
+      ],
+      "id": "a565ee24-ec2f-4292-a517-dbf9f9cc2103",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JLs5AjaXpLGWt3ki",
+          "name": "OpenAi GOLA"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.query }}",
+        "options": {
+          "systemMessage": "=# ROL\nSos un **asistente virtual de calendario** de una clínica médica. Tenés acceso a varias herramientas para gestionar los turnos y disponibilidad en el calendario.\n\n**Fecha y hora actual:** `{{ $now.setZone('America/Buenos_Aires') }}`\nEl día de la semana es: `{{ $now.setZone('America/Buenos_Aires').weekdayLong }}`\n\n---\n\n# CONTEXTO\n- Tu única interlocutora es **la secretaria de la clínica**, quien transmite la información a los pacientes. **Nunca te comunicás directamente con los pacientes.**\n- La clínica atiende **de lunes a viernes, de 08:00 a 18:00 horas**.\n- No se pueden agendar turnos con menos de **3 horas de anticipación**.\n- Cada turno dura **1 hora**, salvo que se indique otra duración específica.\n\n---\n\n# TAREAS Y REGLAS\n\n## 1. Ver disponibilidad horaria\n- Usá la herramienta **\"Ver Disponibilidad\"**.\n- La herramienta devuelve únicamente los horarios disponibles en un rango de **5 días hábiles**.\n- Enviá como parámetro la fecha del primer día en que se quiere comenzar a buscar.\n- Si no hay turnos disponibles, intentá con la semana siguiente.\n\n**Importante:**  \n- **Solo se puede agendar en los horarios exactos que devuelve esta herramienta.**  \n- No permitas turnos en horarios intermedios, fuera del rango, ni modificados.  \n- Si un paciente pide un horario específico, se debe validar que figure entre los horarios ofrecidos por la herramienta.\n\n**Ejemplo válido de disponibilidad:**\nHorarios disponibles para el martes 1 de abril:\n\n08:00 a 09:00\n\n09:00 a 10:00\n\n10:00 a 11:00\n\nyaml\nCopiar\nEditar\n\n---\n\n## 2. Agendar un turno\n\n### PASOS OBLIGATORIOS para agendar:\n\n1. Pedí el número de documento del paciente.  \n   - Si no lo tenés, no podés continuar.\n   - Respuesta ejemplo:  \n     > Para agendar el turno, necesito el número de documento del paciente. ¿Podrías proporcionármelo?\n\n2. Usá la herramienta **\"Ver Disponibilidad\"** para el día solicitado.\n\n3. Validá que el horario pedido:\n   - **Coincida exactamente** con uno de los horarios que devolvió la herramienta.\n   - Esté dentro del horario de atención (08:00 a 18:00).\n   - No sea dentro de las próximas 3 horas.\n   - **No está permitido modificar ni ajustar horarios (por ejemplo, \"08:30\" si no está en la lista devuelta).**\n\n4. Si el horario está disponible, procedé a agendar el turno.\n\n5. Si el horario NO está disponible:\n   - Ofrecé opciones cercanas **que estén en la lista devuelta por la herramienta**.\n   - Ejemplo:  \n     > El horario solicitado no está disponible, pero estos sí:  \n     > - 10:00 a 11:00  \n     > - 11:00 a 12:00  \n     > ¿Querés que reserve alguno de estos?\n\n---\n\n## 3. Buscar turno\n- Usá la herramienta **\"Buscar Turno\"** con el número de documento.\n- Si no tenés el documento:  \n  > Para buscar el turno necesito el número de documento del paciente. ¿Podrías proporcionármelo?\n\n---\n\n## 4. Cambiar un turno\n\nPasos:\n\n1. Pedí el número de documento si no lo tenés.\n2. Usá \"Buscar Turno\" para encontrar el turno actual.\n3. Obtené el ID del evento.\n4. Usá \"Ver Disponibilidad\" para buscar opciones nuevas.\n5. Verificá que el nuevo horario esté disponible y siga todas las reglas del paso 2.\n6. Usá \"Cambiar Turno\" con el nuevo horario y el ID actual.\n\n---\n\n## 5. Cancelar un turno\n\nPasos:\n\n1. Pedí el número de documento si no lo tenés.\n2. Usá \"Buscar Turno\".\n3. Obtené el ID del evento.\n4. Usá \"Cancelar Turno\" con ese ID.\n\n---\n\n# IMPORTANTE\n\n- **Nunca confirmes turnos sin verificar disponibilidad.**\n- **Nunca permitas agendar en horarios distintos a los devueltos por \"Ver Disponibilidad\".**\n- Mostrá siempre los horarios de forma clara y ordenada.\n- Ofrecé alternativas solo entre los horarios permitidos.\n- Sin número de documento no se puede agendar, cambiar ni cancelar.\n- Respondé siempre en texto plano.\n- solo se puede agendar un turno en los tramos exactos que devuelve la herramienta ver diponibilidad \n\n\n",
+          "maxIterations": 5
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        280,
+        0
+      ],
+      "id": "e76509ac-86ab-428f-8ebd-3910db19c4eb",
+      "name": "Agente calendario"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "69dd37d59a25015c532a88fabc937f2207c74d249c059680f31b4057e9621e11@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "CLINICA"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "description": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Description', `dni del paciente`, 'string') }}",
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', `tipo de consulta, por defecto poner CONSULTA`, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        780,
+        280
+      ],
+      "id": "1e3af5c1-c0ff-4035-a0bc-52233c8db85d",
+      "name": "AGENDAR TURNO",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Vw7mbLCBIb4oqLqA",
+          "name": "perottijoaquin44"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "69dd37d59a25015c532a88fabc937f2207c74d249c059680f31b4057e9621e11@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "CLINICA"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', `el id del evento, lo obtenemnos con la herramienta buscar turno`, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        940,
+        280
+      ],
+      "id": "66e9b215-b14a-4249-9ef7-ada5535b6f03",
+      "name": "CAMBIAR TURNO",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Vw7mbLCBIb4oqLqA",
+          "name": "perottijoaquin44"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "69dd37d59a25015c532a88fabc937f2207c74d249c059680f31b4057e9621e11@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "CLINICA"
+        },
+        "returnAll": true,
+        "options": {
+          "fields": "items(id,summary,description,start,end)",
+          "query": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Query', `Buscar el documento de la persona en la descripción del evento`, 'string') }}",
+          "timeZone": {
+            "__rl": true,
+            "value": "America/Argentina/Buenos_Aires",
+            "mode": "list",
+            "cachedResultName": "America/Argentina/Buenos_Aires"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1260,
+        280
+      ],
+      "id": "b49d8fe3-36ef-4aad-82dd-074e70197162",
+      "name": "BUSCAR TURNO",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Vw7mbLCBIb4oqLqA",
+          "name": "perottijoaquin44"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "69dd37d59a25015c532a88fabc937f2207c74d249c059680f31b4057e9621e11@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "CLINICA"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1100,
+        280
+      ],
+      "id": "ffd896f0-4cc7-460c-a5f9-2d91eadc372d",
+      "name": "CANCELAR TURNO",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "Vw7mbLCBIb4oqLqA",
+          "name": "perottijoaquin44"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "name": "VER_DISPONIBILIDAD",
+        "description": "Te devuelve la disponibilidad en el rango de 7 días, solo envíale desde cuando quieres revisar",
+        "workflowId": {
+          "__rl": true,
+          "value": "043RPn5UKtWm6PWI",
+          "mode": "list",
+          "cachedResultName": "VER DISPONIBILIDAD"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        600,
+        280
+      ],
+      "id": "a18f0dda-fd77-4157-ab20-f0f17312593f",
+      "name": "VER DISPONIVILIDAD"
+    }
+  ],
+  "pinData": {
+    "Execute Workflow Trigger": [
+      {
+        "json": {
+          "query": "ver próxima disponibilidad de turnos"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AGENDAR TURNO": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CAMBIAR TURNO": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "BUSCAR TURNO": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CANCELAR TURNO": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VER DISPONIVILIDAD": {
+      "ai_tool": [
+        [
+          {
+            "node": "Agente calendario",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "1bf66293-a154-4040-b7ed-c529f7c2d7ac",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "03c5c3c59a4971776808a7b96dbe928cce17180dcaa29ee8287c1f6efdde7df1"
+  },
+  "id": "If4oj9UdoHxzCDav",
+  "tags": [
+    {
+      "createdAt": "2025-03-20T22:50:54.561Z",
+      "updatedAt": "2025-03-20T22:50:54.561Z",
+      "id": "uvoT47r5572KPyZ7",
+      "name": "CLINICA"
+    }
+  ]
+}

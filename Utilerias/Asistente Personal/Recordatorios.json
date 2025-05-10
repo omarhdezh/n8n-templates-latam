@@ -1,0 +1,254 @@
+{
+  "name": "Recordatorios",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 2
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6d34f8e9-c8cb-4b89-a5ba-a08ac1b192c4",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.summary }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "si"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "7022b564-a53f-4019-9660-478b2f8bd6a1",
+                    "leftValue": "={{ $json.summary }}",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "notExists",
+                      "singleValue": true
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "no"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        660,
+        0
+      ],
+      "id": "447e0867-22b0-4b81-8e2f-f96cf9916983",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "db064f416880c116f5f7bba547c6b62f460208dd8c03a1ded288c9792ad48fc4@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Recordatorios"
+        },
+        "returnAll": true,
+        "options": {
+          "timeMin": "={{ $json.now }}",
+          "timeMax": "={{ $json.nowPlus5 }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        440,
+        0
+      ],
+      "id": "44663963-4ee4-490e-8832-3e1161d8a59e",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "PiOLzOrWcPv936Np",
+          "name": "perottijoaquin44"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Obtener la fecha y hora actual en formato ISO\nconst now = new Date().toISOString();\n\n// Obtener la fecha y hora actual + 5 minutos\nconst nowPlus5 = new Date(Date.now() + 5 * 60000).toISOString();\n\n// Retornar los valores en formato que n8n pueda usar\nreturn [\n  {\n    json: {\n      now: now,\n      nowPlus5: nowPlus5\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        220,
+        0
+      ],
+      "id": "50a367dd-25ff-4bc2-9ff8-ab2e8d39bc3a",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "chatId": "1803148796",
+        "text": "=🚨 RECUERDA {{ $json.summary.toUpperCase() }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        940,
+        -20
+      ],
+      "id": "c9ebda27-4a4a-4c9d-8ffb-cd75375a03bf",
+      "name": "Telegram",
+      "webhookId": "69bb8a42-0457-47f8-8d11-ac1040a3ea6b",
+      "credentials": {
+        "telegramApi": {
+          "id": "gnFzGWyvfVjA7r0W",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "db064f416880c116f5f7bba547c6b62f460208dd8c03a1ded288c9792ad48fc4@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Recordatorios"
+        },
+        "eventId": "={{ $('Google Calendar').item.json.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.2,
+      "position": [
+        1160,
+        -20
+      ],
+      "id": "bfc3501a-04aa-4a1b-8f8b-ebe4539fc262",
+      "name": "Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "PiOLzOrWcPv936Np",
+          "name": "perottijoaquin44"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Telegram": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "160507cf-e786-4428-9ce2-e4b193ca2df8",
+  "meta": {
+    "instanceId": "6706e7927f78c867476b989a37885bd3d67e65333bfeebec48fd077abd1eb7cb"
+  },
+  "id": "hPHzCTyfU56C7wpk",
+  "tags": []
+}
